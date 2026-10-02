@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Hanqing page transcription v1",
+  "description": "待校勘的单页模型结果，不能直接作为发行正文。运行 manifest 记录 schema 版本。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source_id", "physical_page", "printed_page_label", "blocks", "warnings"],
+  "properties": {
+    "source_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 80},
+    "physical_page": {"type": "integer", "minimum": 1},
+    "printed_page_label": {"type": "string"},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "blocks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "reading_order", "text", "bbox", "uncertainties"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "kind": {"enum": ["heading", "main", "annotation", "page-number", "seal", "illustration", "other"]},
+          "reading_order": {"type": "integer", "minimum": 1},
+          "text": {"type": "string"},
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {"type": "number", "minimum": 0, "maximum": 1}
+          },
+          "uncertainties": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}

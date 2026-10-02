@@ -1,0 +1,33 @@
+# 原始底本、解包、页图、识别响应、缓存：仅本地保存。
+/data/raw/
+/data/work/
+/data/cache/
+/dist/
+/build/
+
+# 防止误把放错位置的原始电子书与解包结果提交。
+*.pdf
+*.epub
+*.mobi
+*.azw3
+*.extracted/
+*.unpacked/
+unpacked/
+extracted/
+
+# Python / 本地配置 / 密钥。
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.env
+.env.*
+!.env.example
+config/local.toml
+.DS_Store
+Thumbs.db

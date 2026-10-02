@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "libr-hanqing"
+version = "0.1.0"
+description = "古籍数字化、校勘与 EPUB 制作工作台"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+hanqing = "hanqing.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+hanqing = ["templates/*.tpl", "templates/*.css", "prompts/*.txt"]

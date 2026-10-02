@@ -1,0 +1,26 @@
+# 处理配置草案，供后续 runner 实现。当前 plan 只显示阶段，不读取此文件执行。
+schema_version = 1
+
+[render]
+dpi = 300
+preserve_original = true
+
+[recognition]
+provider = "unconfigured"
+model = ""
+prompt_version = "transcribe-page-v1"
+max_concurrency = 1
+max_retries = 3
+# 按供应商计费单位设置预算；预算未填写前 runner 应拒绝发送请求。
+budget = ""
+
+[editorial]
+preserve_variant_characters = true
+automatic_simplification = false
+automatic_punctuation = false
+
+[publication]
+profile = "hanqing-zh-v1"
+writing_mode = "horizontal-tb"
+require_human_review = true
+require_epubcheck = true
