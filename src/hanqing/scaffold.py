@@ -16,7 +16,7 @@ def _quoted(value: str) -> str:
 
 def _metadata_toml(book: BookMetadata) -> str:
     lines = ["schema_version = 1"]
-    for key in ("id", "work_id", "title", "language", "edition", "status", "primary_source_id"):
+    for key in ("id", "work_id", "title", "language", "edition", "status"):
         lines.append(f"{key} = {_quoted(getattr(book, key))}")
     for creator in book.creators:
         lines.extend([
@@ -27,19 +27,12 @@ def _metadata_toml(book: BookMetadata) -> str:
         lines.extend(["", "[[series]]", f"id = {_quoted(series.id)}", f"name = {_quoted(series.name)}"])
         if series.position is not None:
             lines.append(f"position = {series.position}")
-    lines.extend([
-        "", "# 登记原始底本后，填写 primary_source_id，并添加 sources。",
-        "# [[sources]]", '# id = "scan-001"', '# kind = "pdf"',
-        f'# path = "data/raw/{book.id}/scan-001/original.pdf"',
-        '# sha256 = "填写原始文件的64位SHA-256"', '# url = "原始下载地址"',
-        '# description = "底本版本、藏书机构、卷册和扫描说明"', "",
-    ])
-    return "\n".join(lines)
+    return "\n".join(lines) + "\n"
 
 
 def initialize_book(root: Path, book: BookMetadata) -> Path:
-    if book.status != "draft" or book.sources:
-        raise ValueError("初始化只接受无底本条目的 draft；底本在 book.toml 中登记")
+    if book.status != "draft":
+        raise ValueError("初始化只接受 draft")
     target = root.resolve() / "books" / book.id
     if target.exists():
         raise FileExistsError(f"书籍目录已存在，不会覆盖：{target}")
@@ -87,15 +80,18 @@ def initialize_book(root: Path, book: BookMetadata) -> Path:
         output[f"src/epub/css/{stylesheet}"] = resources.joinpath(stylesheet).read_text(encoding="utf-8")
     output.update({
         "book.toml": _metadata_toml(book),
+        "md/.gitkeep": "",
         "src/mimetype": "application/epub+zip",
         "images/.gitkeep": "",
         "src/epub/images/.gitkeep": "",
         "editorial/source-map.jsonl": "",
         "editorial/decisions.jsonl": "",
         "editorial/review.toml": 'schema_version = 1\nstatus = "pending"\nreviewer = ""\nreviewed_at = ""\n',
-        "editorial/notes.md": "# 校勘说明\n\n记录底本选择、卷章划分、句读、异体字和缺字处理政策。\n"
-        "正文在 ../src/epub/text/ 中编辑；原始模型响应留在 data/work/。\n"
-        "当前只是空骨架，review.toml 尚未验收。\n",
+        "editorial/notes.md": "# 校勘说明\n\n记录卷章划分、句读、异体字和缺字处理政策。\n"
+        "文字底本保存在 ../md/ 并纳入 Git；正文在 ../src/epub/text/ 中编辑。"
+        "原始影像和本地处理记录位于 data/raw/<source-set-id>/，"
+        "由该来源集合的 manifest.json 定义与本书的关系。\n"
+        "Markdown 底本不参与 EPUB 打包。当前只是空骨架，review.toml 尚未验收。\n",
     })
     # 先完成所有内容生成，再排他地创建新目录；输入错误不留下半成品。
     target.parent.mkdir(parents=True, exist_ok=True)

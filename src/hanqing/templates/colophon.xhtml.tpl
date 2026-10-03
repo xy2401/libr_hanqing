@@ -9,8 +9,8 @@
 	<body epub:type="backmatter">
 		<section id="colophon" epub:type="colophon">
 			<h2>版本說明</h2>
-			<p>底本：$edition</p>
-			<p>此為待校勘的出版源碼骨架，尚未加入正文。發行前須補全底本來源、校勘記錄與權利說明。</p>
+			<p>數位版本：$edition</p>
+			<p>此為待校勘的出版源碼骨架，尚未加入正文。</p>
 		</section>
 	</body>
 </html>

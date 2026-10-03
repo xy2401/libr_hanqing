@@ -6,7 +6,7 @@ import unittest
 
 from hanqing.catalog import discover_books, load_book
 from hanqing.models import (
-    BookMetadata, CREATOR_ROLE_CODES, Creator, MetadataError, Series, Source, validate_id,
+    BOOK_STATUSES, BookMetadata, CREATOR_ROLE_CODES, Creator, MetadataError, Series, validate_id,
 )
 
 
@@ -32,16 +32,13 @@ class CatalogTests(unittest.TestCase):
         path.write_text(text, encoding="utf-8")
         return path
 
-    def test_draft_can_be_anonymous_without_sources(self) -> None:
+    def test_draft_can_be_anonymous(self) -> None:
         book = load_book(self.write_book())
         self.assertEqual(book.title, "古籍示例")
         self.assertEqual(book.creators, ())
-        self.assertEqual(book.sources, ())
-        self.assertEqual(book.primary_source_id, "")
 
-    def test_multiple_creators_series_and_sources(self) -> None:
+    def test_multiple_creators_and_series(self) -> None:
         text = _DRAFT.replace('status = "draft"', 'status = "proofread"') + '''
-primary_source_id = "edition-a"
 [[creators]]
 id = "author-a"
 name = "甲"
@@ -56,22 +53,10 @@ position = 2
 [[series]]
 id = "collection-b"
 name = "乙丛书"
-[[sources]]
-id = "edition-a"
-kind = "pdf"
-path = "data/raw/example-book/edition-a/scan.pdf"
-sha256 = "''' + "A" * 64 + '''"
-[[sources]]
-id = "edition-b"
-kind = "epub"
-path = "data/raw/example-book/edition-b/original.epub"
-sha256 = "''' + "b" * 64 + '''"
 '''
         book = load_book(self.write_book(text))
         self.assertEqual([creator.role for creator in book.creators], ["author", "editor"])
         self.assertEqual([series.position for series in book.series], [2, None])
-        self.assertEqual(book.sources[0].sha256, "a" * 64)
-        self.assertEqual(len(book.sources), 2)
 
     def test_invalid_ids_and_windows_device_names(self) -> None:
         invalid = ("", "Book", "中文", "../book", "a_b", "-book", "book-", "a--b", "x" * 81,
@@ -90,15 +75,13 @@ sha256 = "''' + "b" * 64 + '''"
             schema_version=1, id="example-book", work_id="example-work",
             title="古籍示例", language="zh-Hant", edition="待补全", status="draft",
         )
-        self.assertEqual(BookMetadata(**defaults).sources, ())
+        self.assertEqual(BookMetadata(**defaults).creators, ())
         for changes, message in (
             ({"id": "CON"}, "book.id"),
             ({"schema_version": True}, "schema_version"),
-            ({"status": "ready"}, "at least one source"),
+            ({"status": "done"}, "unsupported status"),
             ({"creators": (Creator("same", "甲"), Creator("same", "乙"))}, "duplicate ID"),
-            ({"primary_source_id": "edition-a", "sources": (
-                Source("edition-a", "pdf", "../scan.pdf"),
-            )}, "sources\\[0\\].path"),
+            ({"series": (Series("collection", "丛书", -1),)}, "positive integer"),
         ):
             with self.subTest(changes=changes), self.assertRaisesRegex(MetadataError, message):
                 BookMetadata(**(defaults | changes))
@@ -118,9 +101,6 @@ sha256 = "''' + "b" * 64 + '''"
             {"edition": "初版\x01"},
             {"creators": (Creator("author", "作者\ud800"),)},
             {"series": (Series("collection", "丛书\uffff"),)},
-            {"primary_source_id": "scan", "sources": (
-                Source("scan", "pdf", "data/raw/example-book/scan/a.pdf", description="底本\x02"),
-            )},
         )
         for change in changes:
             with self.subTest(fields=list(change)), self.assertRaisesRegex(MetadataError, "invalid XML 1.0"):
@@ -169,37 +149,30 @@ role = "publisher"
                 with self.assertRaisesRegex(MetadataError, "book.language"):
                     load_book(self.write_book(text))
 
-    def test_relative_source_paths_are_scoped_and_cannot_traverse(self) -> None:
-        invalid = (
-            "../scan.pdf", "/data/raw/example-book/edition-a/scan.pdf",
-            "C:/data/raw/example-book/edition-a/scan.pdf",
-            "C:data/raw/example-book/edition-a/scan.pdf",
-            "data/raw/example-book/edition-a/../scan.pdf",
-            "data/raw/other-book/edition-a/scan.pdf",
-            "data/raw/example-book/other-source/scan.pdf",
-            "data/raw/example-book/edition-a/./scan.pdf",
-            "data/raw/example-book/edition-a//scan.pdf",
-            "data/raw/example-book/edition-a/scan.pdf:stream",
-            "data\\raw\\example-book\\edition-a\\scan.pdf",
-        )
-        for source_path in invalid:
-            with self.subTest(path=source_path):
-                escaped = source_path.replace("\\", "\\\\")
-                text = _DRAFT + f'''
-primary_source_id = "edition-a"
+    def test_scan_fields_are_rejected_for_every_catalog_status(self) -> None:
+        source_table = '''
 [[sources]]
-id = "edition-a"
+id = "scan-001"
 kind = "pdf"
-path = "{escaped}"
+path = "data/raw/source-set/original.pdf"
+sha256 = "''' + "a" * 64 + '''"
 '''
-                with self.assertRaisesRegex(MetadataError, "sources\\[0\\].path"):
-                    load_book(self.write_book(text))
+        for status in BOOK_STATUSES:
+            base = _DRAFT.replace('status = "draft"', f'status = "{status}"')
+            for suffix in (
+                'primary_source_id = "scan-001"\n',
+                'primary_source_id = ""\n',
+                source_table,
+                'primary_source_id = "scan-001"\n' + source_table,
+            ):
+                with self.subTest(status=status, suffix=suffix):
+                    with self.assertRaisesRegex(MetadataError, r"belong in .*manifest\.json"):
+                        load_book(self.write_book(base + suffix))
 
     def test_duplicate_ids_in_each_record_type(self) -> None:
         examples = {
             "creators": 'id = "same"\nname = "甲"\n',
             "series": 'id = "same"\nname = "甲丛书"\n',
-            "sources": 'id = "same"\nkind = "pdf"\npath = "data/raw/example-book/same/a.pdf"\n',
         }
         for record_type, record in examples.items():
             with self.subTest(record_type=record_type):
@@ -207,34 +180,17 @@ path = "{escaped}"
                 with self.assertRaisesRegex(MetadataError, "duplicate ID"):
                     load_book(self.write_book(text))
 
-    def test_non_draft_requires_sources_and_hashes(self) -> None:
-        for status in ("recognized", "proofread", "ready", "released"):
+    def test_all_catalog_statuses_are_independent_of_local_scan_records(self) -> None:
+        raw = self.root / "data" / "raw" / "source-set"
+        raw.mkdir(parents=True)
+        # 书目检查不读取本地来源清单；实际处理的来源验证由 ingest 负责。
+        (raw / "manifest.json").write_text("invalid local manifest", encoding="utf-8")
+        for status in BOOK_STATUSES:
             with self.subTest(status=status):
                 text = _DRAFT.replace('status = "draft"', f'status = "{status}"')
-                with self.assertRaisesRegex(MetadataError, "at least one source"):
-                    load_book(self.write_book(text))
-                text += '''
-primary_source_id = "edition-a"
-[[sources]]
-id = "edition-a"
-kind = "pdf"
-path = "data/raw/example-book/edition-a/scan.pdf"
-'''
-                with self.assertRaisesRegex(MetadataError, "sha256: required"):
-                    load_book(self.write_book(text))
-
-    def test_primary_source_must_identify_a_source(self) -> None:
-        text = _DRAFT + '''
-primary_source_id = "missing"
-[[sources]]
-id = "edition-a"
-kind = "pdf"
-path = "data/raw/example-book/edition-a/scan.pdf"
-'''
-        with self.assertRaisesRegex(MetadataError, "existing source"):
-            load_book(self.write_book(text))
-        with self.assertRaisesRegex(MetadataError, "without a source"):
-            load_book(self.write_book(_DRAFT + 'primary_source_id = "missing"\n'))
+                book = load_book(self.write_book(text))
+                self.assertEqual(book.status, status)
+                self.assertEqual(discover_books(self.root), [book])
 
     def test_schema_and_field_types_are_checked(self) -> None:
         changes = (
@@ -254,19 +210,6 @@ path = "data/raw/example-book/edition-a/scan.pdf"
         ):
             with self.subTest(suffix=suffix), self.assertRaisesRegex(MetadataError, message):
                 load_book(self.write_book(_DRAFT + suffix))
-
-    def test_hash_and_source_kind_are_checked(self) -> None:
-        prefix = _DRAFT + '''
-primary_source_id = "edition-a"
-[[sources]]
-id = "edition-a"
-kind = "pdf"
-path = "data/raw/example-book/edition-a/scan.pdf"
-'''
-        with self.assertRaisesRegex(MetadataError, "64 hexadecimal"):
-            load_book(self.write_book(prefix + 'sha256 = "abc"\n'))
-        with self.assertRaisesRegex(MetadataError, "must be 'pdf' or 'epub'"):
-            load_book(self.write_book(prefix.replace('kind = "pdf"', 'kind = "image"')))
 
     def test_discovery_is_sorted_and_does_not_require_asset_files(self) -> None:
         self.assertEqual(discover_books(self.root), [])

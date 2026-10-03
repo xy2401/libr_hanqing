@@ -6,12 +6,12 @@ from pathlib import Path
 import tomllib
 from typing import Any
 
-from .models import BookMetadata, Creator, MetadataError, Series, Source, validate_id
+from .models import BookMetadata, Creator, MetadataError, Series, validate_id
 
 
 _BOOK_FIELDS = {
     "schema_version", "id", "work_id", "title", "language", "edition", "status",
-    "primary_source_id", "creators", "series", "sources",
+    "creators", "series",
 }
 
 
@@ -57,6 +57,12 @@ def _records(data: dict[str, Any], key: str) -> list[dict[str, Any]]:
 
 
 def _parse_book(data: dict[str, Any]) -> BookMetadata:
+    source_fields = sorted(set(data) & {"primary_source_id", "sources"})
+    if source_fields:
+        raise MetadataError(
+            f"book: {', '.join(source_fields)} belong in "
+            "data/raw/<source-set-id>/manifest.json, not book.toml"
+        )
     _check_fields(data, _BOOK_FIELDS, "book")
     schema_version = data.get("schema_version")
     if type(schema_version) is not int or schema_version != 1:
@@ -67,9 +73,6 @@ def _parse_book(data: dict[str, Any]) -> BookMetadata:
     language = _string(data, "language", "book")
     edition = _string(data, "edition", "book")
     status = _string(data, "status", "book")
-    primary_source_id = _string(
-        data, "primary_source_id", "book", default="", allow_empty=True,
-    )
     creators: list[Creator] = []
     for index, record in enumerate(_records(data, "creators")):
         context = f"creators[{index}]"
@@ -93,35 +96,18 @@ def _parse_book(data: dict[str, Any]) -> BookMetadata:
             position=position,
         ))
 
-    sources: list[Source] = []
-    for index, record in enumerate(_records(data, "sources")):
-        context = f"sources[{index}]"
-        _check_fields(
-            record, {"id", "kind", "path", "sha256", "url", "description"}, context,
-        )
-        identifier = _identifier(record, "id", context)
-        kind = _string(record, "kind", context)
-        path = _string(record, "path", context)
-        sha256 = _string(record, "sha256", context, default="", allow_empty=True)
-        sources.append(Source(
-            id=identifier, kind=kind, path=path, sha256=sha256.lower(),
-            url=_string(record, "url", context, default="", allow_empty=True),
-            description=_string(record, "description", context, default="", allow_empty=True),
-        ))
-
     return BookMetadata(
         schema_version=schema_version, id=book_id, work_id=work_id, title=title,
         language=language, edition=edition, status=status,
-        primary_source_id=primary_source_id, creators=tuple(creators),
-        series=tuple(series), sources=tuple(sources),
+        creators=tuple(creators), series=tuple(series),
     )
 
 
 def load_book(path: Path) -> BookMetadata:
     """Load one UTF-8 ``books/<id>/book.toml`` manifest.
 
-    Asset existence is deliberately independent of catalog validity: ignored
-    local scans need not be present in every checkout.
+    This catalog contains publication metadata only and does not read local
+    scan manifests or require ignored scans to exist in the checkout.
     """
     path = Path(path)
     try:

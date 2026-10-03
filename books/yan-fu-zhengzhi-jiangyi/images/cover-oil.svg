@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1400 2100">
+  <title>《政治講義》封面</title>
+  <desc>《政治講義》，嚴復。原創油畫風格封面。</desc>
+  <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="cover-oil.jpg" x="0" y="0" width="1400" height="2100"/>
+  <rect x="0" y="1700" width="1400" height="320" fill="#000"/>
+  <text x="528.856 615.858 702.86 789.862" y="1838.829" font-family="Microsoft YaHei" font-weight="700" font-size="82.002" fill="#fff">政治講義</text>
+  <text x="656.517 702.6" y="1944.323" font-family="Microsoft YaHei" font-weight="700" font-size="41.083" fill="#fff">嚴復</text>
+</svg>

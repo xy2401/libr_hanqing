@@ -1,0 +1,16 @@
+schema_version = 1
+status = "pending"
+reviewer = ""
+reviewed_at = ""
+
+[text_review]
+status = "completed-with-open-questions"
+method = "existing-markdown-context"
+reviewer = "Codex"
+reviewed_at = "2026-10-03T18:37:57+08:00"
+report = "editorial/text-review.md"
+working_files = 21
+corrected_occurrences = 9
+unresolved_items = 10
+manuscript_sha256 = "d2e06076a6ca2673c39a508484901107e2f99eef16003774ad63601664987628"
+image_collation = "pending"

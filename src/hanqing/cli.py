@@ -18,7 +18,7 @@ def _parser() -> argparse.ArgumentParser:
     commands = parser.add_subparsers(dest="command", required=True)
 
     init = commands.add_parser("init-book", help="新建书目和 EPUB 出版源码目录")
-    init.add_argument("id", help="数字版本 ID，例如 lunyu-ruan-yuan")
+    init.add_argument("id", help="带作者或系列前缀的数字版本 ID，例如 yan-fu-zhengzhi-jiangyi")
     init.add_argument("--work-id", required=True, help="作品 ID，例如 lunyu")
     init.add_argument("--title", required=True)
     init.add_argument("--author", help="作者显示名；与 --author-id 一同填写")
@@ -27,7 +27,7 @@ def _parser() -> argparse.ArgumentParser:
     init.add_argument("--series-id")
     init.add_argument("--series-position", type=int)
     init.add_argument("--language", default="zh-Hant")
-    init.add_argument("--edition", default="待补全底本版本")
+    init.add_argument("--edition", default="古籍数字整理本")
 
     catalog = commands.add_parser("catalog", help="按作者或系列浏览书目")
     catalog.add_argument("--group-by", choices=("author", "series"))
@@ -56,7 +56,7 @@ def _initialize(args: argparse.Namespace) -> None:
     )
     target = initialize_book(args.root, book)
     print(f"已创建：{target}")
-    print("状态：draft；请登记底本并添加校勘正文。")
+    print("状态：draft；请在 raw 清单登记来源并添加校勘正文。")
 
 
 def _catalog(args: argparse.Namespace) -> None:

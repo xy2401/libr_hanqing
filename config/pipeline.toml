@@ -6,13 +6,11 @@ dpi = 300
 preserve_original = true
 
 [recognition]
-provider = "unconfigured"
+method = "assistant-multimodal"
+# 当前助手直接看图转录；不配置外部识别 API、OCR 服务或本地 OCR 引擎。
+# 仅记录已知模型信息，未知时留空。
 model = ""
 prompt_version = "transcribe-page-v1"
-max_concurrency = 1
-max_retries = 3
-# 按供应商计费单位设置预算；预算未填写前 runner 应拒绝发送请求。
-budget = ""
 
 [editorial]
 preserve_variant_characters = true
@@ -20,6 +18,9 @@ automatic_simplification = false
 automatic_punctuation = false
 
 [publication]
+source_directory = "src"
+exclude = ["md/**", "**/*.md", "editorial/**"]
+# EPUB runner 尚未实现；未来仅从 source_directory 收集出版文件。
 profile = "hanqing-zh-v1"
 writing_mode = "horizontal-tb"
 require_human_review = true

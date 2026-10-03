@@ -1,0 +1,12 @@
+schema_version = 1
+id = "yan-fu-zhengzhi-jiangyi"
+work_id = "zhengzhi-jiangyi"
+title = "政治講義"
+language = "zh-Hant"
+edition = "古籍數位整理本"
+status = "draft"
+
+[[creators]]
+id = "yan-fu"
+name = "嚴復"
+role = "author"

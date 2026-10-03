@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1400 2100">
+  <title>《英文漢詁》封面</title>
+  <desc>《英文漢詁》，嚴復。原創水墨風格封面。地球儀與雙語書案，對開書頁以水墨繪有 Noun／名物、Verb／云謂、Syntax／句法。</desc>
+  <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="cover.jpg" x="0" y="0" width="1400" height="2100"/>
+
+  <text x="1043.884 1044.63 1047.41 1045.833" y="311.621 454.202 595.621 736.584" font-family="KaiTi" font-weight="400" font-size="127.421" fill="#202924">英文漢詁</text>
+  <text x="920.055 920.844" y="697.304 772.286" font-family="KaiTi" font-weight="400" font-size="59.121" fill="#202924">嚴復</text>
+</svg>

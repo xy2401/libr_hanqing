@@ -19,6 +19,9 @@ class ScaffoldTests(unittest.TestCase):
             )
             target = initialize_book(root, book)
             self.assertEqual(load_book(target / "book.toml"), book)
+            metadata_text = (target / "book.toml").read_text(encoding="utf-8")
+            for source_marker in ("sources", "primary_source_id", "data/raw/", "sha256", "scan-001"):
+                self.assertNotIn(source_marker, metadata_text)
             self.assertEqual((target / "src/mimetype").read_bytes(), b"application/epub+zip")
             for pattern in ("*.xml", "*.xhtml", "*.opf"):
                 for file in target.rglob(pattern):
