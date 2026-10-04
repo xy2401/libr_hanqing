@@ -4,7 +4,7 @@
 
 每本书使用 `images/` 保存选定的封面与插图素材，`src/META-INF/container.xml` 与 `src/mimetype` 表达容器结构，`src/epub/` 下分设 `text/`、`images/`、`css/`，并保存 `content.opf`、`toc.xhtml`。项目模板中的 `core.css`、`local.css` 均为自写中文样式，不是官方同名文件；官方严格 profile 另有不可编辑的 `core.css`、`se.css`。[官方布局](https://github.com/standardebooks/manual/blob/master/2-filesystem.rst)
 
-Markdown 文字底本保存在书籍根目录的 `md/`，纳入 Git，保留转录原文、页码表与原稿快照，供校勘核对。该目录与 `src/` 并列，不能加入 OPF、spine 或 EPUB；发行只收录 `src/` 出版源码，排除全部 Markdown 和 `editorial/`。底本可包含待剥离的现代附加材料，出版正文仍按下述古籍内容政策处理。EPUB runner 尚未实现。
+完整 Markdown 工作稿、原稿快照与过程材料保留在 raw；书籍根目录的 `md/` 只保留纳入 Git 的文字底本快照，供校勘核对，不自动跟随工作稿变化。项目整理完成后逐项确认成品并复制进入 books，raw 中的来源与项目材料继续保留。`md/` 与 `src/` 并列，不能加入 OPF、spine 或 EPUB；发行只收录 `src/` 出版源码，排除全部 Markdown 和 `editorial/`。底本可包含待剥离的现代附加材料，出版正文仍按下述古籍内容政策处理。候选打包 runner 已实现，完整发行门禁仍待接入。
 
 EPUB 3 基线包括合法的 OCF 打包、可解析的 XHTML、OPF 元数据、完整 manifest、明确 spine，以及带导航语义的目录。初期以可重排横排为默认，竖排另设配置并验证阅读器支持；电子书正文必须可选择、检索。[EPUB 3.3](https://www.w3.org/TR/epub-33/)
 
@@ -15,6 +15,18 @@ EPUB 3 基线包括合法的 OCF 打包、可解析的 XHTML、OPF 元数据、�
 OPF 记录古籍书名、原作作者及贡献者角色、语言、数字版本与更新时间，使用带作者或系列前缀的本项目标识符。现代扫描版出版社、ISBN、版权页、主编/点校者和共享 PDF 的说明保存在 raw 清单，不写入出版 OPF、版本说明或正文。现代点校说明与出版前言不自动进入古籍正文。系列采用 `belongs-to-collection`，以 `collection-type` 区分系列或套书，并记录实际作品次序；现代底本的全集卷次不自动复制为电子书系列信息。作者和系列分类是同一书籍的索引视图，不复制正文。[元数据规则](https://github.com/standardebooks/manual/blob/master/9-metadata.rst)
 
 中文 profile 另定繁简、异体字、缺字、标点、夹注与字形策略。英语 titlecase、美式引号、断词、拼写现代化及英文可读性评分不能自动套用古籍；保留原文的决定应可追溯。[英语排版规则](https://github.com/standardebooks/manual/blob/master/8-typography.rst)
+
+## 校勘依据
+
+词典可解释旧词、通假与候选字形，但不能证明本书用了哪个字，也不能证明 AI 稿中的段落存在。
+跨节指向找不到对应内容时，先记录疑点；进入已授权的影像核对后，检查漏录、例词替换和段落错置，
+再判断是否是原著错指。语法、语义或文内对文支持的推校，在原页不同读时须撤回或另记为他本/编辑读法，
+不能继续称为转录纠错。原页中的疑似误植、旧拼法和原著观点保留，并记录原因。
+
+原注与现代点校混排时，结合早期原版的注号、位置与完整内容确认层次；出版取舍按已确定的注释政策另做差异提案。
+保存修订前字节、实际哈希、所核页图与坐标；整段恢复要同时核对节序、例句和注释引用。
+所列疑点已有定读、指定一章影像勘定、全书页覆盖、人工接受与发行验收分别记录。
+工作稿的结论不自动同步到已接受的出版源码或候选 EPUB。
 
 ## 封面
 
@@ -59,6 +71,29 @@ Windows 开发环境可用仓库的 [封面编排工具](../tools/README.md) 创
 独立编排，源 SVG 保留可编辑文字，发行 SVG 转为轮廓。场景文字保存在生成底画中，须直接
 查看核对，并记录实际提示词和所用参考图；不视为原书页转录、出版正文或副标题。
 
-下一阶段将接入结构、链接、目录与注释检查，再执行 EPUBCheck 并在目标阅读器验收。可选尝试 `se lint` 与 `se build --check`，按实际支持情况评估差异；后者调用 EPUBCheck、Nu，安装 Ace 时追加其检查。通过工具检查不能代替校勘和阅读器测试。[EPUBCheck](https://www.w3.org/publishing/epubcheck/)、[SE build](https://github.com/standardebooks/tools/blob/master/se/commands/build.py)
+## 转换与检查
 
-**当前 EPUB 发行阶段的检查 runner 尚未接入，尚未完成 EPUB 合规或阅读器验证。**
+`assemble-book` 使用本地 Pandoc 从清单的明确行域生成提案，保留标题、表格、列表、换行和
+例句。默认不启用 smart 标点、数学解析或英文拼写改写。正文使用 `section`、稳定段落 ID
+和语言标签，Markdown 至 XHTML 的行域映射保存在非出版记录中。现代注释与引用只能按明确
+取舍一同排除，原著夹注保留；保留的脚注须有 `noteref`、`footnote` 语义和回链。
+原稿目录页与纸本页码不冒充 EPUB 页导航；电子目录按接受的正文结构生成。
+Pandoc 的源位置可能通过 `data-pos` 和 `data-wrapper` 输出到 HTML；这些属性及纯包装元素
+在提案中清理，须保持正文字符、段落 ID 与映射不变，不让转换器内部标记进入成品。
+
+`check-publication` 检查完整资源清单、全书 ID、链接/片段、目录及 spine；导航路标和目录
+链接均指向 spine 文档，导航文档自身以 `linear="no"` 登记。构建拒绝非出版文件和符号链接，
+OCF 的 `mimetype` 位于 ZIP 首项，不压缩、不带额外字段，内容恰为 `application/epub+zip`。
+同一固定源码产生相同候选字节；真实校验始终针对该候选包，不在验收后重建发行包。
+
+当前《政治講義》和《英文漢詁》的候选已通过 EPUBCheck 5.4.0，均为 0 错误、0 警告；
+检查摘要及候选哈希位于 raw 对应作品的 `editorial.<work-id>/publication-validation.json`，完整报告也保存在 raw。
+构建命令自动保存摘要，保存前核验实际包/报告/源码哈希及段落映射；旧摘要在 raw 中按
+内容哈希保留。正文或底本已改变时拒绝沿用旧报告；候选字节改变后，旧阅读器与页覆盖
+记录不能自动转移到新包。相同字节可复用既有官方报告，记录新的摘要保存时间而不虚构检查时间。
+本轮接受正文转换与注释取舍，未表示 21 项文字疑点已解决、影像校勘或页覆盖已完成。
+阅读器验收仍待完成，本地浏览器预览受访问限制未成功，不能用工具检查代替实际排版验收。
+
+可选尝试 `se lint` 与 `se build --check`，按实际支持情况评估差异；后者调用 EPUBCheck、Nu，安装 Ace 时追加其检查。[EPUBCheck](https://www.w3.org/publishing/epubcheck/)、[SE build](https://github.com/standardebooks/tools/blob/master/se/commands/build.py)
+
+候选包检查已经接入，完整校勘证据、页覆盖门禁与阅读器验收仍需完成，当前未正式发行。

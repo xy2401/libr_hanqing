@@ -1,9 +1,12 @@
-/* Hanqing 自有基础样式。借鉴 SE 的样式分层，不是官方 core.css。 */
 @charset "utf-8";
+@namespace epub "http://www.idpf.org/2007/ops";
+
+/* Hanqing 自有基础样式。借鉴 SE 的样式分层，不是官方 core.css。 */
 
 body {
 	font-family: serif;
 	line-height: 1.8;
+	margin: 1em;
 }
 
 h1, h2, h3 {
@@ -18,4 +21,39 @@ p {
 
 img {
 	max-width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	break-after: avoid;
+	line-height: 1.5;
+}
+
+li > p, td > p, th > p, blockquote > p {
+	text-indent: 0;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 1em auto;
+	max-width: 100%;
+}
+
+th, td {
+	padding: 0.25em 0.5em;
+	border: 1px solid currentColor;
+	vertical-align: top;
+}
+
+pre {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	font-family: monospace;
+}
+
+code {
+	font-size: 0.9em;
+}
+
+nav p, section[epub|type~="titlepage"] p, section[epub|type~="colophon"] p {
+	text-indent: 0;
 }

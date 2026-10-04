@@ -30,19 +30,23 @@ raw 清单保留旧 ID 和迁移记录。
 
 | 区域 | 保存内容 | Git | 是否可重建 |
 | --- | --- | --- | --- |
-| `data/raw/<source-set-id>/` | 原始影像底本、共享解包、响应、提案、候选包与处理记录 | 忽略 | 原件需备份；处理中间稿保留历史 |
+| `data/raw/<source-set-id>/` | 原始影像、共享解包、完整 Markdown 工作稿、来源与过程记录、提案和候选包 | 忽略 | 原件需备份；确认成品后仍保留项目材料 |
 | `data/cache/` | 可重建的共享工具缓存 | 忽略 | 是 |
 | `books/<id>/book.toml` | 独立古籍书目、数字版本与书目标记 | 提交 | 由人工维护 |
-| `books/<id>/md/` | Markdown 文字底本、页码表与原稿快照 | 提交 | 保留原文，供校勘核对；不打包 |
+| `books/<id>/md/` | 确认的文字底本、页码表与原稿快照 | 提交 | 固定 Git 快照，不自动跟随 raw 改动；不打包 |
 | `books/<id>/src/` | 已接受的 XHTML、导航、OPF、样式与发行图片 | 提交 | 正文为权威源 |
-| `books/<id>/editorial/` | 校勘政策、编辑决定、Markdown 至 XHTML 的映射与复核证据 | 提交 | 由人工维护 |
+| `books/<id>/editorial/` | 明确接受的 Markdown 至 XHTML 映射/转换记录、选定封面的固定设计记录、最终整理说明 | 提交 | 逐项确认的固定记录；不存待复核工作档案 |
 | `dist/` | 验收通过的发行文件与发布清单 | 忽略 | 从固定输入构建 |
 
 每个原始扫描集的本地数据统一保存在 `data/raw/<source-set-id>/`，整个目录被 Git 忽略。
 原始底本直接命名为 `original.pdf` 或 `original.epub`；整本原始解包放 `unpacked/`，
-保留页图、附带元数据和封面候选原图。分作品的 Markdown 文字底本保存在
-`books/<book-id>/md/` 并纳入 Git，包括转录稿、`page-map.md` 与原稿快照；
-不保存图片或重复解包页图，也不收录到 EPUB。
+保留页图、附带元数据和封面候选原图。分作品的 Markdown 工作稿保存在 `md.<work-id>/`，
+过程记录保存在 `editorial.<work-id>/`；现代附加材料、疑点和原始来源信息完整保留。
+`editorial` 是编辑与制作记录：工作中的校勘说明、复核状态、文字勘误、编辑决定及候选检查
+摘要只在 raw 维护。books 中的同名目录保存明确接受的固定记录，避免两处工作档案同时演化。
+`books/<book-id>/md/` 是纳入 Git 的文字底本快照，包括转录稿、`page-map.md` 与原稿快照，
+不保存图片或重复解包页图，也不收录到 EPUB。项目整理完成后逐项确认并复制成品进入 books，
+不得为整理 Git 或清理出版信息而移走 raw 的项目材料。两处文件不自动双向同步。
 
 改写过的原始 Markdown 在同目录保存为 `*.original.md`。`manifest.json` 是本地数据
 唯一清单，当前使用 `schema_version = 3`、`path_base = "project"`，顶层 `source_set_id` 标识扫描集，
@@ -59,12 +63,15 @@ raw 清单保留旧 ID 和迁移记录。
 
 `books[]` 定义该底本中的一本或多本独立作品，包含 `book_id`、`work_id`、
 `book_directory`、`markdown_directory`、显式 `markdown_order`、`page_map` 和页域。
-`book_directory` 与 `markdown_directory` 均相对项目根目录。例如：
+`markdown_directory`、`markdown_order` 与 `page_map` 指向 raw 工作稿；
+`markdown_snapshot_directory` 指向 books Git 快照，`editorial_directory` 指向 raw 过程记录。
+`files[].book_snapshot` 保存对应快照的路径、真实哈希和记录时间，历史接受记录继续指向当时的快照。
+所有目录均相对项目根目录。例如：
 
 | `book_id` | `work_id` | `markdown_directory` |
 | --- | --- | --- |
-| `yan-fu-zhengzhi-jiangyi` | `zhengzhi-jiangyi` | `books/yan-fu-zhengzhi-jiangyi/md` |
-| `yan-fu-yingwen-hangu` | `yingwen-hangu` | `books/yan-fu-yingwen-hangu/md` |
+| `yan-fu-zhengzhi-jiangyi` | `zhengzhi-jiangyi` | `data/raw/yan-fu-quanji-vol-06-2014/md.zhengzhi-jiangyi` |
+| `yan-fu-yingwen-hangu` | `yingwen-hangu` | `data/raw/yan-fu-quanji-vol-06-2014/md.yingwen-hangu` |
 
 两项的 `cover_candidate` 指向该扫描集 `data/raw/yan-fu-quanji-vol-06-2014/unpacked/`
 中的两张候选原图，尚未作为出版图片接受。
@@ -81,7 +88,8 @@ raw 清单保留旧 ID 和迁移记录。
 识别 JSONL 和 AI Markdown 是待复核中间稿。人工接受后的正文只在 XHTML 中编辑，
 避免 JSON、Markdown 和 XHTML 三份正文同时演化。再次识别或结构化只生成提案与差异，
 由编辑决定是否接受；处理器不得重写已经接受的 XHTML。目录整理不能作为完成校勘或
-EPUB 转换的证据；文字勘误与影像逐字校勘分别记录，现有稿件尚未完成影像校勘与人工接受，最终 EPUB 尚未生成。
+EPUB 转换的证据；文字勘误与影像逐字校勘分别记录。现有两本书已明确接受本轮正文结构与
+注释取舍并生成候选 EPUB，但影像校勘、页覆盖、未决疑点和完整发行验收仍未完成。
 
 `books/` 面向古籍独立出版内容，`edition` 描述本项目数字整理版。
 现代扫描版的出版社、ISBN、年份、主编/点校者、版权页与共享 PDF 的说明只保存在 raw：
@@ -93,7 +101,7 @@ EPUB 转换的证据；文字勘误与影像逐字校勘分别记录，现有稿
 
 发行只从 `books/<book-id>/src/` 收集文件，排除整个 `md/`、Markdown、`editorial/` 与 raw，
 禁止递归打包整个书籍目录或在 OPF 引用底本。`config/pipeline.toml` 声明这一边界，
-EPUB runner 尚未实现；Python wheel/sdist 由 `MANIFEST.in` 排除 `books/` 和 `data/`。
+候选 EPUB 构建已实现；Python wheel/sdist 由 `MANIFEST.in` 排除 `books/` 和 `data/`。
 
 ## 底本登记
 
@@ -132,9 +140,11 @@ SHA-256 校验。哈希未知时如实标为未验证，不使用占位值。可
 文件与清单管理、校验和构建；查看或处理图像的工具不执行文字识别。
 已有文本 EPUB 可以直接提取文本与注释。
 
-这是后续工作流的设计，当前只实现 `plan` 展示，本地处理 runner 尚未实现。
-识别不由 Python runner 调用模型。Markdown 底本放 `books/<book-id>/md/`，其他本地处理结果
-按实际内容保存在 `data/raw/<source-set-id>/`；各次运行以清单中的 `run_id` 和内容哈希追踪。
+这是完整工作流的阶段契约；当前已实现正文提案/明确接受、候选打包和结构/EPUBCheck 检查，
+其余阶段仍待接入。`plan` 只展示契约与实现范围。
+识别不由 Python runner 调用模型。Markdown 工作稿与其他本地处理结果按实际内容保存在
+`data/raw/<source-set-id>/`，books 保留确认快照与接受的出版材料；各次运行以清单中的
+`run_id` 和内容哈希追踪。复制进入 books 不表示 raw 项目可以删除，也不自动提升验收状态。
 每次运行记录应保存：输入文件和页图哈希、底本 ID、图像处理参数、程序版本、
 识别方式、已知助手/模型信息、提示词版本、schema 版本、完成页与错误。
 未知模型信息留空，不根据文件时间或内容猜测。
@@ -159,40 +169,69 @@ PDF 页面先保留整页，再记录裁切、旋转和区域坐标关系；原�
 这些运行期检查尚未实现。不要把模型自报的置信度当成校勘通过条件。
 
 `editorial/source-map.jsonl` 保存 Markdown 文字底本段落与 XHTML 的对应关系，不复制正文。
-建议每条记录包含 `markdown_path`、`markdown_anchor`、`xhtml_path` 与 `xhtml_id`。
+当前每条记录包含 `markdown_path`、`markdown_sha256`、`markdown_lines`（含两端的行域）、
+`xhtml_path`、`element_id` 和元素类型，路径相对项目根目录。
 影像底本 ID、文件哈希、页图坐标及影像至 Markdown 的对应关系只在 raw 清单中保存。
 文字底本可通过其页码表与 raw 清单回溯影像；一页可对应多个段落，一段正文也可跨页。
 
-`editorial/decisions.jsonl` 保存编辑决定：疑点 ID、来源位置、原读、采用读法、理由、
+raw 的 `editorial.<work-id>/decisions.jsonl` 保存工作中的编辑决定：疑点 ID、来源位置、原读、采用读法、理由、
 编辑者与时间；句读、繁简、异体字和他本校改分别记录。正文缺字不能凭记忆补齐；
 保留缺字符号或字形图片等方案由书籍校勘政策决定。
 
 已有文字底本时，未明确要求影像核对的“校勘／勘误”默认执行文字检查；疑点先记录为待核，
 不自行启动看图转录、逐页影像比对或全书重新识别。
 
-基于现有 Markdown 的文字勘误单独记录于 `editorial/text-review.md`，明确文本检查范围、
+已有影像证据的工作稿修订可用 `tools/apply-markdown-revision.py`：显式计划限定原读、采用读法、
+页域和输入哈希，助手对照页图转写，工具仅负责保存快照、差异、编辑决定和清单历史。
+文字勘误使用同一工具的 `existing-markdown-context` 方法，限定逐项修改，登记有真实哈希的
+文内引文及每个改字的依据；不要求页图，也不将文字判断记为影像识别。具体计划格式见 `tools/README.md`。
+修订只落入 raw；旧出版计划的哈希与行域保留，并标为工作输入已变化。books 底本快照、
+已接受 XHTML 和候选 EPUB 须经新的差异提案分别确认，不能自动覆盖。局部段落或例词偏离
+也不能推定整篇错误或整书已通过校勘；扩大影像核录范围遵守执行许可约定。
+
+基于现有 Markdown 的文字勘误单独记录于 raw 的 `editorial.<work-id>/text-review*.md`，明确文本检查范围、
 改字依据和未决疑点。`review.toml` 的 `text_review` 子表记录该轮检查及稿件摘要，
 不改变顶层人工复核状态；raw 清单中的 `text_reviews[]` 记录本地处理历史。
 文字勘误不能证明转录忠实、正文无遗漏或页图覆盖完整，也不能作为 `proofread` 的验收。
 
-`review.toml` 初始为 `pending`。未来接受复核时须记录复核者、时间、已处理页/排除页、
+raw 的 `editorial.<work-id>/review.toml` 初始为 `pending`，在首次制作提案时初始化，books 不创建工作复核档案。
+未来接受复核时须记录复核者、时间、已处理页/排除页、
 出版源码摘要及未处理疑点数；正文变更后旧复核证据失效。`book.toml` 中的
 `draft / recognized / proofread / ready / released` 仅为书目标记，当前可人工填写，
 不证明已经通过检查。发行门禁必须检查实际复核证据与校验报告。
 
 ## Python 模块边界与推进顺序
 
-当前核心全部使用标准库：CLI、元数据、分类、初始化、阶段契约、页面数据类型和资源模板。
-后续接入本地 PDF 引擎和 EPUB 验证工具，隔离于边界模块；图片识别使用助手自身多模态能力，
+当前 Python 核心使用标准库：CLI、元数据、分类、初始化、阶段契约、页面数据类型、资源模板、
+出版提案/接受、候选打包与结构校验。转换通过子进程调用本地 Pandoc，官方校验通过 Java
+调用本地 EPUBCheck；这些依赖与扫描处理隔离，不执行图片识别。
+后续接入本地 PDF 处理模块；图片识别使用助手自身多模态能力，
 不实现模型供应商 SDK、外部识别接口或本地 OCR 后端，也不把 SE 工具集作为启动骨架的强制依赖。
 
-后续依次增加：
+已实现的出版路径：
+
+- `publication/markdown.py`：明确行域与现代注释排除、本地 Pandoc 转换、语言与原注语义、段落映射。
+- `publication/assemble.py`：读取唯一 raw 清单中的 `publication_plan`，核验真实底本哈希，
+  从声明的 raw 工作稿生成 `proposal.<book>/`；具体材料完成整理并明确接受后复制 Git 底本快照，
+  段落映射指向此固定快照，保留 raw 工作稿、此前源码与接受记录。已有不同快照拒绝自动覆盖。
+- `publication/package.py`：固定 `books/<book>/src/` 输入，合法 OCF 候选打包、本地 EPUBCheck。
+- `publication/evidence.py`：核对候选、官方报告与当前出版源码哈希，验证段落锚点和文字底本哈希，
+  读取 raw 工作复核档案，在同一 raw 作品目录保存检查摘要并归档旧摘要；仅在相同候选字节下保留此前阅读器/页覆盖记录。
+- `validators/publication.py`：资源、全书 ID、片段链接、目录目标与 spine 检查。
+
+raw 清单的 `assembly_runs[]`、`build_runs[]` 保存本地处理历史和真实候选/报告哈希，
+不新增导入清单。提案目录中的转换报告与段落映射属于处理输出，不是来源关系副本。
+接受后的 `editorial/conversion-review.json` 和 `source-map.jsonl` 只记录文字底本至出版源码
+的取舍与映射，不包含扫描出版元数据。候选检查摘要另存 raw 的 `editorial.<work-id>/publication-validation.json`，
+不替代该目录 `review.toml` 的完整复核状态；用户接受本轮转换不自动把 `pending` 改成发行通过。
+
+后续仍需增加：
 
 1. `importers/` 与 `renderers/`：本地导入、安全解包、页图和来源 manifest。
 2. 识别稿管理与本地处理 runner：助手看图转录，Python 登记 Markdown、校验来源与页覆盖、逐页保存进度。
-3. `editorial/` 与 `publication/`：提案转换、差异接受、注释及来源映射；确认后人工编辑 XHTML。
-4. `validators/`：页覆盖、未决疑点、链接/ID/目录、EPUBCheck 和复核摘要检查。
-5. `publication/` 构建器：先打候选包，再验收，最后保存同一包及发行清单。
+3. `editorial/`：已接受正文的差异复核与持续校勘，避免再次生成覆盖校勘成果。
+4. `validators/`：实际页覆盖、未决疑点和复核摘要门禁、目标阅读器验收。
+5. `publication/` 发行流程：完整验收后保存已经检查的相同包及发行清单。
 
 首版保持本地 CLI 与单书工作流。批量下载、网页校勘、队列、模型投票、系列自动拆卷和
 独立书籍仓库导出放在端到端样例验证之后。中文版规则及 SE 差异见 `standards.md`。

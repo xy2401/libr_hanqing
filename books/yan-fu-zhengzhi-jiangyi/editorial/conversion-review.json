@@ -1,0 +1,223 @@
+{
+  "book_id": "yan-fu-zhengzhi-jiangyi",
+  "status": "conversion-accepted",
+  "reviewer": "用户（本会话明确接受本轮转换）",
+  "accepted_at": "2026-10-03T14:12:48Z",
+  "scope": "本轮正文结构及注释取舍；不等于文字疑点解决、影像校勘或发行验收。",
+  "note_policy": "仅收严复原文与可确认的原著注释，现代注释保留在 Markdown 底本。",
+  "pandoc": "pandoc 3.8.2.1",
+  "chapters": [
+    {
+      "chapter_id": "preface",
+      "title": "自敍",
+      "markdown_path": "books/yan-fu-zhengzhi-jiangyi/md/003-preface.md",
+      "markdown_sha256": "5d5e849983fef3163f4c626228b07686f62ec045bae8d89ab14aad1ce824b08e",
+      "line_range": [
+        1,
+        5
+      ],
+      "epub_type": "preface"
+    },
+    {
+      "chapter_id": "session-01",
+      "title": "第一會",
+      "markdown_path": "books/yan-fu-zhengzhi-jiangyi/md/004-session-01.md",
+      "markdown_sha256": "09dfe9df210396fdc364e5ec1c22cb7e4345d1725ea858dd874e883342c04982",
+      "line_range": [
+        1,
+        59
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "session-02",
+      "title": "第二會",
+      "markdown_path": "books/yan-fu-zhengzhi-jiangyi/md/005-session-02.md",
+      "markdown_sha256": "8d8c3304ec6abdf7093309b60bb4e2c6213357628ba452a5f9113006849940b8",
+      "line_range": [
+        1,
+        47
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "session-03",
+      "title": "第三會",
+      "markdown_path": "books/yan-fu-zhengzhi-jiangyi/md/006-session-03.md",
+      "markdown_sha256": "6ff61dbf1d130ac1f235c271ac73e8a43af6bebd3e8ac10037526ddae5ff7afc",
+      "line_range": [
+        1,
+        39
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "session-04",
+      "title": "第四會",
+      "markdown_path": "books/yan-fu-zhengzhi-jiangyi/md/007-session-04.md",
+      "markdown_sha256": "8907cb7be23bc31e4583a66d3d7342c54fc79870711a8152939e2355a2dbea50",
+      "line_range": [
+        1,
+        66
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "session-05",
+      "title": "第五會",
+      "markdown_path": "books/yan-fu-zhengzhi-jiangyi/md/008-session-05.md",
+      "markdown_sha256": "cec0fdcfd64f2be013fa284398eab28060495b04b0bb8dcf74d6e4c703696eb3",
+      "line_range": [
+        1,
+        49
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "session-06",
+      "title": "第六會",
+      "markdown_path": "books/yan-fu-zhengzhi-jiangyi/md/009-session-06.md",
+      "markdown_sha256": "36752b6d745a7cf421395c4e0dec16bacd51ed6f316d998c3b8661161b3e409c",
+      "line_range": [
+        1,
+        19
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "session-07",
+      "title": "第七會",
+      "markdown_path": "books/yan-fu-zhengzhi-jiangyi/md/010-session-07.md",
+      "markdown_sha256": "a4aa663e0cc11d13a35946ed601afc64f22b34b5441c7770fa7c912b6a931da8",
+      "line_range": [
+        1,
+        33
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "session-08",
+      "title": "第八會",
+      "markdown_path": "books/yan-fu-zhengzhi-jiangyi/md/011-session-08.md",
+      "markdown_sha256": "d766272b7baa53445a71450c88ef3638d0c291289a73ffc4111413b836ffee20",
+      "line_range": [
+        1,
+        69
+      ],
+      "epub_type": "chapter"
+    }
+  ],
+  "mapped_blocks": 192,
+  "source_files": {
+    "epub/content.opf": "7dbd774aa7390cfc143ed3e229c5f1d5f7fedb084fa503699e187cfcdfd50f0c",
+    "epub/css/core.css": "dee9fb16f6d75e12134bcf8940692f2097df2dc1a0cee87b37e9c6e230622a77",
+    "epub/css/local.css": "81a2be82bea406b321d9b07f18fb2df4f23eb06e1b1b5b9313b0ab67ad84a546",
+    "epub/images/cover.svg": "d7db4606c792c577cbf4abffb0db9e958c58d69a28de5675bfac15f81081247b",
+    "epub/text/colophon.xhtml": "5d60912b9e06bd46064905f336fcc2ef1fc6ac3949221a8f30653f328ef06c10",
+    "epub/text/cover.xhtml": "17a83600c8acbd3b60d145deb764771b520f893bbbc53bf4abdcf56f77ecde34",
+    "epub/text/preface.xhtml": "5f35566fc39c3b4f684275cfa1dd2e44979be212c002015168b4d7d939855dba",
+    "epub/text/session-01.xhtml": "ebe6660a98bf49a44833aa7e5558799fac3e7b2f34eb922f10047be5f9b91a24",
+    "epub/text/session-02.xhtml": "ffe3d05354c34a8c093e1a3038e66d50168e277e307a60db5d4e8cd6f4b9f11a",
+    "epub/text/session-03.xhtml": "3767dcc9f2c7431218e9c519035ca64ec1fbdc117256fd5dec66be0c36cc275a",
+    "epub/text/session-04.xhtml": "e25686a4f6c15029eee6e7493247ce4f53cad04a45f77c5318062621ae235b27",
+    "epub/text/session-05.xhtml": "e4cef672c804170359a2635ebd117731f61240662c3c774e754892cb6580d0c1",
+    "epub/text/session-06.xhtml": "ee6bfe0c21fa42753beae96deb9ba5fff84b85aa0c0ef5aad06c69b2d8f75ae1",
+    "epub/text/session-07.xhtml": "c660857ee62c7a62fe55be1bbd1318ee56619dc23c0782d8d9cc6b981eb70e8c",
+    "epub/text/session-08.xhtml": "57c980c9aed1780cf75c4ec4f21923728b9888febeab3896c2cac1f6c34267b6",
+    "epub/text/titlepage.xhtml": "8557db2d28f42ae94e03270a36eb4582c4eef63838388022fb801055006a1bdc",
+    "epub/toc.xhtml": "4ce23793c446c034089325c9e4d7015a1d91ceabb16179932d1fc555776fe6cc",
+    "META-INF/container.xml": "67fad6931f8ec8601f197b2aa692d86b73bbec0e83dc5ed976457928f37aa32a",
+    "mimetype": "e468e350d1143eb648f60c7b0bd6031101ec0544a361ca74ecef256ac901f48b"
+  },
+  "proofreading_status": "pending",
+  "release_status": "not-released",
+  "validation_repairs": [
+    {
+      "path": "books/yan-fu-zhengzhi-jiangyi/src/epub/content.opf",
+      "reason": "EPUBCheck RSC-011：导航的目录路标目标须位于 spine，将导航文档作为非线性条目登记。",
+      "before_sha256": "7dbd774aa7390cfc143ed3e229c5f1d5f7fedb084fa503699e187cfcdfd50f0c",
+      "after_sha256": "4dd05b03d2620d4398179c5e326174177c678377164fc273b2ef3a26df67425f"
+    },
+    {
+      "path": "books/yan-fu-zhengzhi-jiangyi/src/epub/text/preface.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "5f35566fc39c3b4f684275cfa1dd2e44979be212c002015168b4d7d939855dba",
+      "after_sha256": "e4c16a2559664b3ff537f9c38e4124cc5239b4a8160dc26a8e9debaf983c286f"
+    },
+    {
+      "path": "books/yan-fu-zhengzhi-jiangyi/src/epub/text/session-01.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "ebe6660a98bf49a44833aa7e5558799fac3e7b2f34eb922f10047be5f9b91a24",
+      "after_sha256": "2066afa6fc07975fcdd3ac12b93bc93c8f30abcb412e662f4d22729bf25df375"
+    },
+    {
+      "path": "books/yan-fu-zhengzhi-jiangyi/src/epub/text/session-02.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "ffe3d05354c34a8c093e1a3038e66d50168e277e307a60db5d4e8cd6f4b9f11a",
+      "after_sha256": "eedb91ae702b5da2849d739474764b89d867ae5552d1fdbe68821b48b90226d4"
+    },
+    {
+      "path": "books/yan-fu-zhengzhi-jiangyi/src/epub/text/session-03.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "3767dcc9f2c7431218e9c519035ca64ec1fbdc117256fd5dec66be0c36cc275a",
+      "after_sha256": "48c6f28667c41b61b30094fa5b45c407bb68f7814bc1ff4c243be4922645aa0a"
+    },
+    {
+      "path": "books/yan-fu-zhengzhi-jiangyi/src/epub/text/session-04.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "e25686a4f6c15029eee6e7493247ce4f53cad04a45f77c5318062621ae235b27",
+      "after_sha256": "5a8717d0a3e0e1592cf63150dd8ff6b3c29042d03d7abbb157b412d474504ee0"
+    },
+    {
+      "path": "books/yan-fu-zhengzhi-jiangyi/src/epub/text/session-05.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "e4cef672c804170359a2635ebd117731f61240662c3c774e754892cb6580d0c1",
+      "after_sha256": "ec4e41e099f6dbba0140c0b77f2caa200cdf1eaca219f614366c45706b47b124"
+    },
+    {
+      "path": "books/yan-fu-zhengzhi-jiangyi/src/epub/text/session-06.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "ee6bfe0c21fa42753beae96deb9ba5fff84b85aa0c0ef5aad06c69b2d8f75ae1",
+      "after_sha256": "ef09d6bf2638f42ee3574a8d748a3ac26b4c9dbf4a8173b05a1d9b2684816d5c"
+    },
+    {
+      "path": "books/yan-fu-zhengzhi-jiangyi/src/epub/text/session-07.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "c660857ee62c7a62fe55be1bbd1318ee56619dc23c0782d8d9cc6b981eb70e8c",
+      "after_sha256": "7afe0848a2bee89a3f4aa11daec77e6410f11ca9db148e84b19e6fbecc00dfdf"
+    },
+    {
+      "path": "books/yan-fu-zhengzhi-jiangyi/src/epub/text/session-08.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "57c980c9aed1780cf75c4ec4f21923728b9888febeab3896c2cac1f6c34267b6",
+      "after_sha256": "f4121a8826d5c1d25765709872b921bd3519f5457d7f4bbbc6853164bb8acd94"
+    },
+    {
+      "path": "books/yan-fu-zhengzhi-jiangyi/src/epub/content.opf",
+      "reason": "记录出版源码更新时间。",
+      "before_sha256": "4dd05b03d2620d4398179c5e326174177c678377164fc273b2ef3a26df67425f",
+      "after_sha256": "b689f0c724b2f21cebebd9dea425dde0105baaec9280951aa201ca6a15988520"
+    }
+  ],
+  "current_source_files": {
+    "epub/content.opf": "b689f0c724b2f21cebebd9dea425dde0105baaec9280951aa201ca6a15988520",
+    "epub/css/core.css": "dee9fb16f6d75e12134bcf8940692f2097df2dc1a0cee87b37e9c6e230622a77",
+    "epub/css/local.css": "81a2be82bea406b321d9b07f18fb2df4f23eb06e1b1b5b9313b0ab67ad84a546",
+    "epub/images/cover.svg": "d7db4606c792c577cbf4abffb0db9e958c58d69a28de5675bfac15f81081247b",
+    "epub/text/colophon.xhtml": "5d60912b9e06bd46064905f336fcc2ef1fc6ac3949221a8f30653f328ef06c10",
+    "epub/text/cover.xhtml": "17a83600c8acbd3b60d145deb764771b520f893bbbc53bf4abdcf56f77ecde34",
+    "epub/text/preface.xhtml": "e4c16a2559664b3ff537f9c38e4124cc5239b4a8160dc26a8e9debaf983c286f",
+    "epub/text/session-01.xhtml": "2066afa6fc07975fcdd3ac12b93bc93c8f30abcb412e662f4d22729bf25df375",
+    "epub/text/session-02.xhtml": "eedb91ae702b5da2849d739474764b89d867ae5552d1fdbe68821b48b90226d4",
+    "epub/text/session-03.xhtml": "48c6f28667c41b61b30094fa5b45c407bb68f7814bc1ff4c243be4922645aa0a",
+    "epub/text/session-04.xhtml": "5a8717d0a3e0e1592cf63150dd8ff6b3c29042d03d7abbb157b412d474504ee0",
+    "epub/text/session-05.xhtml": "ec4e41e099f6dbba0140c0b77f2caa200cdf1eaca219f614366c45706b47b124",
+    "epub/text/session-06.xhtml": "ef09d6bf2638f42ee3574a8d748a3ac26b4c9dbf4a8173b05a1d9b2684816d5c",
+    "epub/text/session-07.xhtml": "7afe0848a2bee89a3f4aa11daec77e6410f11ca9db148e84b19e6fbecc00dfdf",
+    "epub/text/session-08.xhtml": "f4121a8826d5c1d25765709872b921bd3519f5457d7f4bbbc6853164bb8acd94",
+    "epub/text/titlepage.xhtml": "8557db2d28f42ae94e03270a36eb4582c4eef63838388022fb801055006a1bdc",
+    "epub/toc.xhtml": "4ce23793c446c034089325c9e4d7015a1d91ceabb16179932d1fc555776fe6cc",
+    "META-INF/container.xml": "67fad6931f8ec8601f197b2aa692d86b73bbec0e83dc5ed976457928f37aa32a",
+    "mimetype": "e468e350d1143eb648f60c7b0bd6031101ec0544a361ca74ecef256ac901f48b"
+  }
+}

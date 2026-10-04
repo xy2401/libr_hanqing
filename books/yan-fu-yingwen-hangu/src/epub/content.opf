@@ -1,23 +1,2 @@
-<?xml version='1.0' encoding='utf-8'?>
-<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" version="3.0" unique-identifier="book-id" xml:lang="zh-Hant">
-	<metadata>
-		<dc:identifier id="book-id">urn:hanqing:book:yan-fu-yingwen-hangu</dc:identifier>
-		<dc:title>英文漢詁</dc:title>
-		<dc:language>zh-Hant</dc:language>
-		<dc:creator id="creator-1">嚴復</dc:creator>
-		<meta refines="#creator-1" property="role" scheme="marc:relators">aut</meta>
-		<meta property="dcterms:modified">2026-10-03T13:09:50Z</meta>
-	</metadata>
-	<manifest>
-		<item id="toc" href="toc.xhtml" media-type="application/xhtml+xml" properties="nav" />
-		<item id="core-css" href="css/core.css" media-type="text/css" />
-		<item id="local-css" href="css/local.css" media-type="text/css" />
-		<item id="cover" href="images/cover.svg" media-type="image/svg+xml" properties="cover-image" />
-		<item id="titlepage" href="text/titlepage.xhtml" media-type="application/xhtml+xml" />
-		<item id="colophon" href="text/colophon.xhtml" media-type="application/xhtml+xml" />
-	</manifest>
-	<spine>
-		<itemref idref="titlepage" />
-		<itemref idref="colophon" />
-	</spine>
-</package>
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" version="3.0" unique-identifier="metadata-book-id" xml:lang="zh-Hant"><metadata><dc:identifier id="metadata-book-id">urn:hanqing:book:yan-fu-yingwen-hangu</dc:identifier><dc:title>英文漢詁</dc:title><dc:language>zh-Hant</dc:language><dc:creator id="metadata-creator-1">嚴復</dc:creator><meta refines="#metadata-creator-1" property="role" scheme="marc:relators">aut</meta><meta property="dcterms:modified">2026-10-03T14:21:58Z</meta></metadata><manifest><item id="resource-3" href="css/core.css" media-type="text/css" /><item id="resource-4" href="css/local.css" media-type="text/css" /><item id="resource-6" href="images/cover.svg" media-type="image/svg+xml" properties="cover-image" /><item id="resource-8" href="text/chapter-01.xhtml" media-type="application/xhtml+xml" /><item id="resource-9" href="text/chapter-02.xhtml" media-type="application/xhtml+xml" /><item id="resource-10" href="text/chapter-03.xhtml" media-type="application/xhtml+xml" /><item id="resource-11" href="text/chapter-04.xhtml" media-type="application/xhtml+xml" /><item id="resource-12" href="text/chapter-05.xhtml" media-type="application/xhtml+xml" /><item id="resource-13" href="text/chapter-06.xhtml" media-type="application/xhtml+xml" /><item id="resource-14" href="text/chapter-07.xhtml" media-type="application/xhtml+xml" /><item id="resource-15" href="text/chapter-08.xhtml" media-type="application/xhtml+xml" /><item id="resource-16" href="text/chapter-09.xhtml" media-type="application/xhtml+xml" /><item id="resource-17" href="text/chapter-10.xhtml" media-type="application/xhtml+xml" /><item id="resource-18" href="text/chapter-11.xhtml" media-type="application/xhtml+xml" /><item id="resource-19" href="text/chapter-12.xhtml" media-type="application/xhtml+xml" /><item id="resource-20" href="text/chapter-13.xhtml" media-type="application/xhtml+xml" /><item id="resource-21" href="text/chapter-14.xhtml" media-type="application/xhtml+xml" /><item id="resource-22" href="text/chapter-15.xhtml" media-type="application/xhtml+xml" /><item id="resource-23" href="text/chapter-16.xhtml" media-type="application/xhtml+xml" /><item id="resource-24" href="text/chapter-17.xhtml" media-type="application/xhtml+xml" /><item id="resource-25" href="text/chapter-18.xhtml" media-type="application/xhtml+xml" /><item id="resource-26" href="text/colophon.xhtml" media-type="application/xhtml+xml" /><item id="resource-27" href="text/cover.xhtml" media-type="application/xhtml+xml" /><item id="resource-28" href="text/preface.xhtml" media-type="application/xhtml+xml" /><item id="resource-29" href="text/titlepage.xhtml" media-type="application/xhtml+xml" /><item id="resource-30" href="text/zhiyan.xhtml" media-type="application/xhtml+xml" /><item id="resource-31" href="toc.xhtml" media-type="application/xhtml+xml" properties="nav" /></manifest><spine><itemref idref="resource-27" /><itemref idref="resource-29" /><itemref idref="resource-31" linear="no" /><itemref idref="resource-28" /><itemref idref="resource-30" /><itemref idref="resource-8" /><itemref idref="resource-9" /><itemref idref="resource-10" /><itemref idref="resource-11" /><itemref idref="resource-12" /><itemref idref="resource-13" /><itemref idref="resource-14" /><itemref idref="resource-15" /><itemref idref="resource-16" /><itemref idref="resource-17" /><itemref idref="resource-18" /><itemref idref="resource-19" /><itemref idref="resource-20" /><itemref idref="resource-21" /><itemref idref="resource-22" /><itemref idref="resource-23" /><itemref idref="resource-24" /><itemref idref="resource-25" /><itemref idref="resource-26" /></spine></package>

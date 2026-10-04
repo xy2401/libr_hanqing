@@ -84,14 +84,7 @@ def initialize_book(root: Path, book: BookMetadata) -> Path:
         "src/mimetype": "application/epub+zip",
         "images/.gitkeep": "",
         "src/epub/images/.gitkeep": "",
-        "editorial/source-map.jsonl": "",
-        "editorial/decisions.jsonl": "",
-        "editorial/review.toml": 'schema_version = 1\nstatus = "pending"\nreviewer = ""\nreviewed_at = ""\n',
-        "editorial/notes.md": "# 校勘说明\n\n记录卷章划分、句读、异体字和缺字处理政策。\n"
-        "文字底本保存在 ../md/ 并纳入 Git；正文在 ../src/epub/text/ 中编辑。"
-        "原始影像和本地处理记录位于 data/raw/<source-set-id>/，"
-        "由该来源集合的 manifest.json 定义与本书的关系。\n"
-        "Markdown 底本不参与 EPUB 打包。当前只是空骨架，review.toml 尚未验收。\n",
+        "editorial/.gitkeep": "",
     })
     # 先完成所有内容生成，再排他地创建新目录；输入错误不留下半成品。
     target.parent.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,432 @@
+{
+  "book_id": "yan-fu-yingwen-hangu",
+  "status": "conversion-accepted",
+  "reviewer": "用户（本会话明确接受本轮转换）",
+  "accepted_at": "2026-10-03T14:12:49Z",
+  "scope": "本轮正文结构及注释取舍；不等于文字疑点解决、影像校勘或发行验收。",
+  "note_policy": "仅收严复原文与可确认的原著注释，现代注释保留在 Markdown 底本。",
+  "pandoc": "pandoc 3.8.2.1",
+  "chapters": [
+    {
+      "chapter_id": "preface",
+      "title": "敘",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/001-prefatory-texts.md",
+      "markdown_sha256": "4463139b9c7b46cad9a6c8831381f693cc1fc45e396b44e34952d1eb5ed73c70",
+      "line_range": [
+        17,
+        33
+      ],
+      "epub_type": "preface"
+    },
+    {
+      "chapter_id": "zhiyan",
+      "title": "卮言",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/001-prefatory-texts.md",
+      "markdown_sha256": "4463139b9c7b46cad9a6c8831381f693cc1fc45e396b44e34952d1eb5ed73c70",
+      "line_range": [
+        47,
+        75
+      ],
+      "epub_type": "preface"
+    },
+    {
+      "chapter_id": "chapter-01",
+      "title": "篇一 CHAPTER I",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/003-chapter-01.md",
+      "markdown_sha256": "d2fd90775ab20e54fcbc1ca662e2deb0b4bce3d7615bfe7ad3be841bb10deb81",
+      "line_range": [
+        1,
+        39
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-02",
+      "title": "篇二 Chapter II 正書 Orthography",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/004-chapter-02.md",
+      "markdown_sha256": "87ea6dc23ec29e9144e0618c34fe44e3c3beeb95b6632f252bc432faafcb8e03",
+      "line_range": [
+        1,
+        95
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-03",
+      "title": "篇三 Chapter III 字論 Etymology",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/005-chapter-03.md",
+      "markdown_sha256": "e477e242d66dacfda454366db9251ed23d8cf2f1da220d71c0294917568f2227",
+      "line_range": [
+        1,
+        81
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-04",
+      "title": "篇四 Chapter IV 名物部 Nouns",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/006-chapter-04.md",
+      "markdown_sha256": "bd365f1641069b13973d93b44832c0ccf520de8d2e0ff8b7a8d0a97354626213",
+      "line_range": [
+        1,
+        216
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-05",
+      "title": "篇五 Chapter V 區別部 Adjectives",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/007-chapter-05.md",
+      "markdown_sha256": "0a8b7f57a20cb1a376cde4f7b6372d7a799ef943cb814b81447a9b0fe8982372",
+      "line_range": [
+        1,
+        99
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-06",
+      "title": "篇六 Chapter VI 稱代部 PRONOUNS",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/008-chapter-06.md",
+      "markdown_sha256": "2cc5f4451ba40e239423aff7c03489dc7c544d346bbe44681ef3970dd42a3af8",
+      "line_range": [
+        1,
+        193
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-07",
+      "title": "篇七 云謂部 VERBS",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/009-chapter-07.md",
+      "markdown_sha256": "e7b76c6b067ebed7fe5ce6a47863515449a718fcad1439f715d922f8c626c76e",
+      "line_range": [
+        1,
+        700
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-08",
+      "title": "篇八 疏狀部 ADVERBS",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/010-chapter-08.md",
+      "markdown_sha256": "260d4b8515b9f0d1d7cc219bc3053780ce4391c585c95010d4464cf3fe343207",
+      "line_range": [
+        1,
+        68
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-09",
+      "title": "篇九 介系部 PREPOSITIONS",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/011-chapter-09.md",
+      "markdown_sha256": "4e9dfba89d84d337dc7c30506ea602dbae4692507a059f4c02430069ef985362",
+      "line_range": [
+        1,
+        70
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-10",
+      "title": "篇十 挈合部 CONJUNCTIONS",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/012-chapter-10.md",
+      "markdown_sha256": "55f3a0f76555088818b9644647e4881be9e026de8744ee1114ac4cecd275ae2e",
+      "line_range": [
+        1,
+        79
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-11",
+      "title": "篇十一 嗟歎部 INTERJECTIONS",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/013-chapter-11.md",
+      "markdown_sha256": "8d65b2d8fcc9161a14a9140f1063a8036ab0d17c5e361f5423066a93644df31b",
+      "line_range": [
+        1,
+        11
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-12",
+      "title": "篇十二　制字　WORD-MAKING",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/014-chapter-12.md",
+      "markdown_sha256": "90a713c5da59162ec6683cd38cb57ff9a2b54afccdfb5cbacc8bc5530e0e8327",
+      "line_range": [
+        1,
+        518
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-13",
+      "title": "篇十三　句法　SYNTAX",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/015-chapter-13.md",
+      "markdown_sha256": "3db70fa9e8b1bc5537e51b0f7934b091a3046f1dcfc9fbf383030bf17bbf8c3c",
+      "line_range": [
+        1,
+        157
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-14",
+      "title": "篇十四 CHAPTER XIV 論句主謂語 SUBJECT AND PREDICATE",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/016-chapter-14.md",
+      "markdown_sha256": "6e648142c893aba66f0d3ae2d5277e98f407646c5e66ac26b04d86a0289de6c0",
+      "line_range": [
+        1,
+        117
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-15",
+      "title": "篇十五 CHAPTER XV 句法分類 CLASSIFICATION OF SENTENCES",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/017-chapter-15.md",
+      "markdown_sha256": "ae75b3ef701def94ad562b3bdd21dcfcadf406e9b28af8f284d42e5e4e03d96e",
+      "line_range": [
+        1,
+        131
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-16",
+      "title": "篇十六 造句集例 SUMMARY OF THE RULES OF SYNTAX",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/018-chapter-16.md",
+      "markdown_sha256": "09bd306b8f849e2ad0f765e5dbeb466b324b0e651af6d80d149c3de16d65e67c",
+      "line_range": [
+        1,
+        272
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-17",
+      "title": "篇十七 析辭 ANALYSIS OF SENTENCES",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/019-chapter-17.md",
+      "markdown_sha256": "fd9f975cfd72aaec70fa5379916a13b01935f5db1a79242f4f11aee4506d5665",
+      "line_range": [
+        1,
+        938
+      ],
+      "epub_type": "chapter"
+    },
+    {
+      "chapter_id": "chapter-18",
+      "title": "篇十八 CHAPTER XVIII",
+      "markdown_path": "books/yan-fu-yingwen-hangu/md/020-chapter-18.md",
+      "markdown_sha256": "65e9268dc425ce04bc9aa5fbcda022f00238872d68737a6a4703fd0c44428d5f",
+      "line_range": [
+        1,
+        67
+      ],
+      "epub_type": "chapter"
+    }
+  ],
+  "mapped_blocks": 2290,
+  "source_files": {
+    "epub/content.opf": "2ff83eef7e44f79e288c861f153acaff46bd79cf2330d782dd1d8cefaea78da5",
+    "epub/css/core.css": "dee9fb16f6d75e12134bcf8940692f2097df2dc1a0cee87b37e9c6e230622a77",
+    "epub/css/local.css": "81a2be82bea406b321d9b07f18fb2df4f23eb06e1b1b5b9313b0ab67ad84a546",
+    "epub/images/cover.svg": "7ca968d17cabe0e459f0c531eca447321de4d8809f800ad7e7ab3d10622f598f",
+    "epub/text/chapter-01.xhtml": "d13e9002e9c66a99675aa0df8168bc5d297390f2591f009bbf645c0bd0087b56",
+    "epub/text/chapter-02.xhtml": "aec16920d6b85d8397d359d7459bfaadb8aea2514b4de7efeb1df983d0d14ec7",
+    "epub/text/chapter-03.xhtml": "89a0139a38babc847963d6f7089f6588bed78300a6dde2a843794565bbd10c16",
+    "epub/text/chapter-04.xhtml": "2e6f163b4cbdce275d92b4f3cb0bf205b368ed41a11ae6af9455fd66c8806330",
+    "epub/text/chapter-05.xhtml": "d34bee2c40254f83231ff2ddc01cbe347ada38609037c8c82c3aee515272258f",
+    "epub/text/chapter-06.xhtml": "a0bfc56e2e71905633cf8f69136d53de597202aaac8db19015cb72069dbf9adf",
+    "epub/text/chapter-07.xhtml": "cbeb58f33c58a531d68e49ab82791af8e4526994f8ffc4ace0f7b5f2d3717b13",
+    "epub/text/chapter-08.xhtml": "79559ecc83c5b882befa01d52d64d8b6f3d73e361b304376aeff0e6492f571e1",
+    "epub/text/chapter-09.xhtml": "b74cbfba08f142a6f058a1461364168cbf590cf993b970f667f020c70cd2bfe3",
+    "epub/text/chapter-10.xhtml": "763c21e040dac2c893a63065a74bd28a5cd2407b4965441f528fdf22b420e9d9",
+    "epub/text/chapter-11.xhtml": "a787ad692c304fe6a1e8f7bd383444093a9902a05d2682830ecc11cefa6e7f0c",
+    "epub/text/chapter-12.xhtml": "8500b9b30e85c55697bcd85d0d14f6564caf148bf6b8c339cc8bd8b1c659424e",
+    "epub/text/chapter-13.xhtml": "fca8c92403d8ccd96062b36aedb100eb9e5fe647a70dec1f9ff6443d9b1b7f28",
+    "epub/text/chapter-14.xhtml": "abd95ca3a9791b581785c1156c0eaaef54deb40412a056f272ba5faa19384906",
+    "epub/text/chapter-15.xhtml": "842aabb91826d63a8ebe87c92a0770ddf3de74739cdb0c06060b9a964202b4f2",
+    "epub/text/chapter-16.xhtml": "e1aab521882a8f941e04abe1dc19175f947bc38b1c1de3c08875ea89e2d8b2a1",
+    "epub/text/chapter-17.xhtml": "3498fb73bc731e8674b4d310b28c254dcc2edae2be3b9a3c58e393bfdd7f43aa",
+    "epub/text/chapter-18.xhtml": "d11075d51c779f355bf28942eaeca64d1370acb5432192a2a10f3d4f2b8957b2",
+    "epub/text/colophon.xhtml": "5d60912b9e06bd46064905f336fcc2ef1fc6ac3949221a8f30653f328ef06c10",
+    "epub/text/cover.xhtml": "fd785f32b560bb9dbfc585fbe2bc3519de59f907a95f3ec113231e51a6042ff8",
+    "epub/text/preface.xhtml": "57df3511b3dfd0d5ac5f50405d3cbe62461fde2b05337e270d6395434407e14d",
+    "epub/text/titlepage.xhtml": "4aec98fd2c92a3770438c9122066598677712a8766212e061c2ddf050e935ec7",
+    "epub/text/zhiyan.xhtml": "a31a0de0d933dc8c94251b5ae94a76f869f7320c730b2372d878142a1d04627e",
+    "epub/toc.xhtml": "39e46f9facc589be424c09a00231f93b4da9783605aab0356b027af963b4b721",
+    "META-INF/container.xml": "67fad6931f8ec8601f197b2aa692d86b73bbec0e83dc5ed976457928f37aa32a",
+    "mimetype": "e468e350d1143eb648f60c7b0bd6031101ec0544a361ca74ecef256ac901f48b"
+  },
+  "proofreading_status": "pending",
+  "release_status": "not-released",
+  "validation_repairs": [
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/content.opf",
+      "reason": "EPUBCheck RSC-011：导航的目录路标目标须位于 spine，将导航文档作为非线性条目登记。",
+      "before_sha256": "2ff83eef7e44f79e288c861f153acaff46bd79cf2330d782dd1d8cefaea78da5",
+      "after_sha256": "e3b38caed253d06ab75c146de54275a4fa63bdb68c031e4d6ee7ed856dcad1e1"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/preface.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "57df3511b3dfd0d5ac5f50405d3cbe62461fde2b05337e270d6395434407e14d",
+      "after_sha256": "27613534038574456494c2dca5bb726196e1645dd117fc826eb37bbbdc4df309"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/zhiyan.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "a31a0de0d933dc8c94251b5ae94a76f869f7320c730b2372d878142a1d04627e",
+      "after_sha256": "9cc797a41f118508593363b7934613d7cbfafdf72fba74d1f81b398990aaf24e"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-01.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "d13e9002e9c66a99675aa0df8168bc5d297390f2591f009bbf645c0bd0087b56",
+      "after_sha256": "8801b6d8276d797413140e27002001522edcef246787ed4340c209e6180a4174"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-02.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "aec16920d6b85d8397d359d7459bfaadb8aea2514b4de7efeb1df983d0d14ec7",
+      "after_sha256": "64f594e129cf5dd995470168b3b87f9e897cc65504e77691b3450f1a00c5be58"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-03.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "89a0139a38babc847963d6f7089f6588bed78300a6dde2a843794565bbd10c16",
+      "after_sha256": "59256b0c7bce6f99316bd237770ef7eb95d2fca858b1f1d99506cd8c56170f52"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-04.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "2e6f163b4cbdce275d92b4f3cb0bf205b368ed41a11ae6af9455fd66c8806330",
+      "after_sha256": "3e06ea336f3b764850816d5577311928c1a74bfe4246fa0c129541b1293b9bb8"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-05.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "d34bee2c40254f83231ff2ddc01cbe347ada38609037c8c82c3aee515272258f",
+      "after_sha256": "e8436915cb4ca5e6e24ac6337f61f8003ae74667e83097dcefeeea794bf8972a"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-06.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "a0bfc56e2e71905633cf8f69136d53de597202aaac8db19015cb72069dbf9adf",
+      "after_sha256": "b350654dcad2fc6f45b63bc70b16a5e21df9d4523322272bdbcedbd8daa91833"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-07.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "cbeb58f33c58a531d68e49ab82791af8e4526994f8ffc4ace0f7b5f2d3717b13",
+      "after_sha256": "cc93d5c0b1f751f2f33f9b930277343ae994eed995064f417e96eedbc8e32fdd"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-08.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "79559ecc83c5b882befa01d52d64d8b6f3d73e361b304376aeff0e6492f571e1",
+      "after_sha256": "938d07997b27000aa8d7416cd9f67153570848a20d9535c2605cda1c78d84b00"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-09.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "b74cbfba08f142a6f058a1461364168cbf590cf993b970f667f020c70cd2bfe3",
+      "after_sha256": "6ae82bde71c00e583bdce9e6c29e979a464d0905c997709e3fdda020fa2c6b3c"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-10.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "763c21e040dac2c893a63065a74bd28a5cd2407b4965441f528fdf22b420e9d9",
+      "after_sha256": "2a029a87bf50dc7de51594b060f02898670df1a643c56b3e89902290d074f240"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-11.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "a787ad692c304fe6a1e8f7bd383444093a9902a05d2682830ecc11cefa6e7f0c",
+      "after_sha256": "63390e68d9bd92cae27793a3136a02b1a398e1629f91d7221ad8f1b5f8f185f7"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-12.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "8500b9b30e85c55697bcd85d0d14f6564caf148bf6b8c339cc8bd8b1c659424e",
+      "after_sha256": "f7056bc6b3fe329301a8a5b243d8620a875262e99b1b71d97ce379d0f7b5c34a"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-13.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "fca8c92403d8ccd96062b36aedb100eb9e5fe647a70dec1f9ff6443d9b1b7f28",
+      "after_sha256": "4a41ea8a077ea5a53622b2dbd69d090044d37122c9973a52bb739321834b3e31"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-14.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "abd95ca3a9791b581785c1156c0eaaef54deb40412a056f272ba5faa19384906",
+      "after_sha256": "b546e6fb22ac25891e37d1d496719ee83b4cc584532d1d71cc2a8f2943bb79f2"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-15.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "842aabb91826d63a8ebe87c92a0770ddf3de74739cdb0c06060b9a964202b4f2",
+      "after_sha256": "c87f7933f2102401e07afcdbceab4963bc1433f1c9cf72cfbd1b7e0fcc00d387"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-16.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "e1aab521882a8f941e04abe1dc19175f947bc38b1c1de3c08875ea89e2d8b2a1",
+      "after_sha256": "0a944f3abb26c5114bf4fc76f7bfe2198b46c7a455f055132fb2338536f9c45f"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-17.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "3498fb73bc731e8674b4d310b28c254dcc2edae2be3b9a3c58e393bfdd7f43aa",
+      "after_sha256": "5309dd38d57ee03877f5fff521f4fd80098c141f79595546137debc7e17b6154"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/text/chapter-18.xhtml",
+      "reason": "移除 Pandoc 的源位置包装元素，正文字符、段落 ID 和映射不变。",
+      "before_sha256": "d11075d51c779f355bf28942eaeca64d1370acb5432192a2a10f3d4f2b8957b2",
+      "after_sha256": "b3ee414bb35ee83612309c5a8d6c499cf5c930690fcf2541019d83a4254c81c0"
+    },
+    {
+      "path": "books/yan-fu-yingwen-hangu/src/epub/content.opf",
+      "reason": "记录出版源码更新时间。",
+      "before_sha256": "e3b38caed253d06ab75c146de54275a4fa63bdb68c031e4d6ee7ed856dcad1e1",
+      "after_sha256": "8c14b9e6815e9ab39e7acc27c3b371bf9e202358b96448a56660311678aaf814"
+    }
+  ],
+  "current_source_files": {
+    "epub/content.opf": "8c14b9e6815e9ab39e7acc27c3b371bf9e202358b96448a56660311678aaf814",
+    "epub/css/core.css": "dee9fb16f6d75e12134bcf8940692f2097df2dc1a0cee87b37e9c6e230622a77",
+    "epub/css/local.css": "81a2be82bea406b321d9b07f18fb2df4f23eb06e1b1b5b9313b0ab67ad84a546",
+    "epub/images/cover.svg": "7ca968d17cabe0e459f0c531eca447321de4d8809f800ad7e7ab3d10622f598f",
+    "epub/text/chapter-01.xhtml": "8801b6d8276d797413140e27002001522edcef246787ed4340c209e6180a4174",
+    "epub/text/chapter-02.xhtml": "64f594e129cf5dd995470168b3b87f9e897cc65504e77691b3450f1a00c5be58",
+    "epub/text/chapter-03.xhtml": "59256b0c7bce6f99316bd237770ef7eb95d2fca858b1f1d99506cd8c56170f52",
+    "epub/text/chapter-04.xhtml": "3e06ea336f3b764850816d5577311928c1a74bfe4246fa0c129541b1293b9bb8",
+    "epub/text/chapter-05.xhtml": "e8436915cb4ca5e6e24ac6337f61f8003ae74667e83097dcefeeea794bf8972a",
+    "epub/text/chapter-06.xhtml": "b350654dcad2fc6f45b63bc70b16a5e21df9d4523322272bdbcedbd8daa91833",
+    "epub/text/chapter-07.xhtml": "cc93d5c0b1f751f2f33f9b930277343ae994eed995064f417e96eedbc8e32fdd",
+    "epub/text/chapter-08.xhtml": "938d07997b27000aa8d7416cd9f67153570848a20d9535c2605cda1c78d84b00",
+    "epub/text/chapter-09.xhtml": "6ae82bde71c00e583bdce9e6c29e979a464d0905c997709e3fdda020fa2c6b3c",
+    "epub/text/chapter-10.xhtml": "2a029a87bf50dc7de51594b060f02898670df1a643c56b3e89902290d074f240",
+    "epub/text/chapter-11.xhtml": "63390e68d9bd92cae27793a3136a02b1a398e1629f91d7221ad8f1b5f8f185f7",
+    "epub/text/chapter-12.xhtml": "f7056bc6b3fe329301a8a5b243d8620a875262e99b1b71d97ce379d0f7b5c34a",
+    "epub/text/chapter-13.xhtml": "4a41ea8a077ea5a53622b2dbd69d090044d37122c9973a52bb739321834b3e31",
+    "epub/text/chapter-14.xhtml": "b546e6fb22ac25891e37d1d496719ee83b4cc584532d1d71cc2a8f2943bb79f2",
+    "epub/text/chapter-15.xhtml": "c87f7933f2102401e07afcdbceab4963bc1433f1c9cf72cfbd1b7e0fcc00d387",
+    "epub/text/chapter-16.xhtml": "0a944f3abb26c5114bf4fc76f7bfe2198b46c7a455f055132fb2338536f9c45f",
+    "epub/text/chapter-17.xhtml": "5309dd38d57ee03877f5fff521f4fd80098c141f79595546137debc7e17b6154",
+    "epub/text/chapter-18.xhtml": "b3ee414bb35ee83612309c5a8d6c499cf5c930690fcf2541019d83a4254c81c0",
+    "epub/text/colophon.xhtml": "5d60912b9e06bd46064905f336fcc2ef1fc6ac3949221a8f30653f328ef06c10",
+    "epub/text/cover.xhtml": "fd785f32b560bb9dbfc585fbe2bc3519de59f907a95f3ec113231e51a6042ff8",
+    "epub/text/preface.xhtml": "27613534038574456494c2dca5bb726196e1645dd117fc826eb37bbbdc4df309",
+    "epub/text/titlepage.xhtml": "4aec98fd2c92a3770438c9122066598677712a8766212e061c2ddf050e935ec7",
+    "epub/text/zhiyan.xhtml": "9cc797a41f118508593363b7934613d7cbfafdf72fba74d1f81b398990aaf24e",
+    "epub/toc.xhtml": "39e46f9facc589be424c09a00231f93b4da9783605aab0356b027af963b4b721",
+    "META-INF/container.xml": "67fad6931f8ec8601f197b2aa692d86b73bbec0e83dc5ed976457928f37aa32a",
+    "mimetype": "e468e350d1143eb648f60c7b0bd6031101ec0544a361ca74ecef256ac901f48b"
+  }
+}
