@@ -12,8 +12,8 @@ from hanqing.publication.assemble import digest, read_context, save_manifest
 from hanqing.publication.xmlutil import project_path
 
 
-def normalize_raw_records(root: Path, data: dict) -> int:
-    """Adapt record links to the flat raw layout, retaining the previous bytes."""
+def normalize_working_records(root: Path, data: dict) -> int:
+    """Adapt record links to the flat work layout, retaining the previous bytes."""
     changed = 0
     now = datetime.now(timezone.utc).isoformat()
     for relation in data["books"]:
@@ -35,7 +35,7 @@ def normalize_raw_records(root: Path, data: dict) -> int:
             content = updated.encode("utf-8")
             if content == original:
                 continue
-            snapshot = path.with_name(path.stem + ".before-raw-layout.original.md")
+            snapshot = path.with_name(path.stem + ".before-work-layout.original.md")
             if snapshot.exists() and snapshot.read_bytes() != original:
                 raise FileExistsError(snapshot)
             if not snapshot.exists():
@@ -44,7 +44,7 @@ def normalize_raw_records(root: Path, data: dict) -> int:
             data["files"].append({"path": snapshot_path, "sha256": digest(snapshot), "bytes": len(original),
                                   "kind": "project-record-snapshot", "book_id": relation["book_id"], "work_id": work})
             path.write_bytes(content)
-            record.setdefault("revisions", []).append({"operation": "raw-record-link-layout", "edited_at": now,
+            record.setdefault("revisions", []).append({"operation": "work-record-link-layout", "edited_at": now,
                 "previous_snapshot": snapshot_path, "previous_sha256": record["sha256"], "sha256": digest(path)})
             record.update(sha256=digest(path), bytes=len(content))
             changed += 1
@@ -53,8 +53,8 @@ def normalize_raw_records(root: Path, data: dict) -> int:
 
 def restore(root: Path, manifest: Path) -> dict:
     root, manifest = root.resolve(), manifest.resolve()
-    if not manifest.is_relative_to(root / "data" / "raw") or manifest.name != "manifest.json":
-        raise ValueError("Use the source set's data/raw/<id>/manifest.json")
+    if not manifest.is_relative_to(root / "data" / "work") or manifest.name != "manifest.json":
+        raise ValueError("Use the source set's data/work/<id>/manifest.json")
     data = json.loads(manifest.read_text(encoding="utf-8"))
     copies, replacements, previous_relations = [], {}, []
     for relation in data["books"]:
@@ -75,7 +75,7 @@ def restore(root: Path, manifest: Path) -> dict:
                 destination = project_path(root, (target / path.relative_to(source)).relative_to(root).as_posix())
                 sha = digest(path)
                 if destination.exists() and (not destination.is_file() or digest(destination) != sha):
-                    raise FileExistsError(f"Existing raw work is preserved: {destination}")
+                    raise FileExistsError(f"Existing working material is preserved: {destination}")
                 old, new = path.relative_to(root).as_posix(), destination.relative_to(root).as_posix()
                 replacements[old] = new
                 copies.append({"source": old, "path": new, "sha256": sha, "bytes": path.stat().st_size,
@@ -125,14 +125,14 @@ def restore(root: Path, manifest: Path) -> dict:
         for key in ("markdown_order", "page_map", "publication_plan", "publication_policy", "text_review"):
             if key in relation:
                 relation[key] = remap(relation[key])
-    adjusted = normalize_raw_records(root, data)
-    data["material_policy"] = {"working_area": "raw", "book_markdown_role": "version-controlled-snapshot",
-                               "promotion": "copy-after-explicit-item-acceptance", "retain_raw_after_promotion": True}
-    data.setdefault("relocations", []).append({"operation": "restore-and-retain-raw-project-materials", "recorded_at": now,
+    adjusted = normalize_working_records(root, data)
+    data["material_policy"] = {"working_area": "work", "book_markdown_role": "version-controlled-snapshot",
+                               "promotion": "copy-after-explicit-item-acceptance", "retain_work_after_promotion": True}
+    data.setdefault("relocations", []).append({"operation": "restore-and-retain-work-project-materials", "recorded_at": now,
         "method": "copy-with-sha256-verification", "copies": copies, "previous_book_relations": previous_relations,
         "historical_runs_unchanged": True, "accepted_publication_files_unchanged": True})
     save_manifest(manifest, data)
-    return {"files": len(copies), "bytes": sum(item["bytes"] for item in copies), "working_area": "raw", "record_links_adjusted": adjusted}
+    return {"files": len(copies), "bytes": sum(item["bytes"] for item in copies), "working_area": "work", "record_links_adjusted": adjusted}
 
 
 if __name__ == "__main__":

@@ -1,41 +1,57 @@
 # 本地数据区
 
-每个原始扫描集的原件和处理数据统一放在 `raw/<source-set-id>/`，与出版书籍
-`books/<book-id>/` 分开命名；一个扫描集可以对应一本或多本独立作品：
+```text
+data/
+├── inbox/                 待处理原件的转运区
+├── work/
+│   └── <source-set-id>/   已开始整理的项目材料
+│       ├── original.pdf  或 original.epub，保持原始字节
+│       ├── unpacked/     整本解包与共享页图
+│       ├── md.<work-id>/  完整 Markdown 工作稿及原稿快照
+│       ├── editorial.<work-id>/  来源、校勘和过程记录
+│       ├── proposal.<book-id>/   待接受的转换提案
+│       └── manifest.json 工作区唯一清单
+└── cache/                工具缓存、历史快照及迁移日志
 
-- `original.pdf` 或 `original.epub` 保存原始底本，保持原始字节。
-- `unpacked/` 保存整本原始解包，保留页图、附带元数据和封面候选原图，供各作品共享。
-- Markdown 文字底本保存在 `books/<book-id>/md/` 并纳入 Git，包括转录稿、`page-map.md` 和 `*.original.md` 原稿快照；raw 不再保存文字底本目录。
-- `manifest.json` 是唯一清单；顶层 `source_set_id` 标识扫描集，`source_id`、`source_kind`、`source_path` 与 `source_sha256` 登记原件，`files[]` 保存路径、哈希和来源关系，`books[]` 定义每本书的 `book_id`、`work_id`、`book_directory`、`markdown_directory`、显式 `markdown_order`、`page_map` 与页域，并保存历次处理记录。
+books/<book-id>/
+├── md/                   已确认并纳入 Git 的文字底本快照
+├── src/                  已接受的出版源码，打包唯一输入
+├── editorial/            已接受的固定制作记录
+└── dist/                 本书的包、构建与检查记录，忽略 Git
+```
 
-例如 `books/yan-fu-zhengzhi-jiangyi/md/` 和 `books/yan-fu-yingwen-hangu/md/`
-共享 `raw/yan-fu-quanji-vol-06-2014/` 中的 `original.pdf` 与 `unpacked/`。
-封面候选原图为 `unpacked/cover-zhengzhi-jiangyi.jpg` 和
-`unpacked/cover-yingwen-hangu.jpg`，由对应 `books[]` 项的 `cover_candidate` 引用，
-尚未作为出版图片接受。
+新收到的 PDF、EPUB 或页图先放 `inbox/`。实际开始整理时，核验原件，归入
+`work/<source-set-id>/` 并登记原始文件名、字节哈希和来源；不把已处理原件副本留在转运区。
+`intake-pdfs` 已支持按显式计划批量接收 PDF，并核验、提取原始编码流；自动拆书与排队仍为规划。
+inbox、work 和 cache 全部忽略 Git。
 
-现代扫描版出版社、ISBN、出版年份、主编/点校者、底本描述和导入说明保存在 raw 清单的
-`bibliography` 与各 `books[]` 项的 `source_publication`，不写入古籍成品的元数据或版本说明。
-`publication_policy` 记录现代附加材料的排除与混排材料复核要求；非出版 Markdown 底本完整保留原文。
+work 是持续整理区，保留原件、解包、完整文字工作稿、现代附加材料、历史快照和校勘依据。
+新接收的扫描集先有原件、`unpacked/` 与唯一清单，`books[]` 为空；后续明确拆书后再建立关系。
+`pdf_unpack.pages[]` 记录物理页序、图片对象、矩阵、裁切框、旋转与流哈希；无图片页保存原始
+内容流及资源引用，不把图片数量直接当作物理页覆盖。PDF 中的完整字体和其他资源仍保留在原件。
+一个扫描集可以在 `manifest.json` 的 `books[]` 定义一本或多本作品；作者/系列前缀用于稳定
+book-id，不按原始 PDF 数量推断拆书。各作品共享原件与解包，分别维护工作稿和出版源码。
 
-重复页图须核验与 `unpacked/` 中保留的规范页图 SHA-256 一致后才能删除；
-规范页图仍须存在，副本来源记录保留在 `manifest.json` 的 `files[]`，
-`deduplicated_from` 保留旧副本路径，`path` 指向同字节规范页图。
+唯一工作清单使用 `schema_version=3`、`path_base="project"`。当前路径相对项目根目录，
+保存来源身份、真实哈希、文件映射、页域、作品关系及整理历史；历史导入路径保持原记录。
+现代出版信息仅在工作区保存，不写入成品书目或出版正文。确认成品后复制快照进入 books，
+work 项目材料继续保留；两处不自动同步。重复页图仅在核验与保留的规范页图同字节后去除。
 
-清单使用 `schema_version=3`、`path_base="project"`。当前 `path`、原字节快照
-`original_snapshot`、`source_path`、书籍/Markdown 目录、章节、页码表和封面候选引用
-统一相对项目根目录；`original_path` 保留原导入路径。每项保存当前 `sha256` 与原始 `original_sha256`。
-原件与书籍的关系只由清单的 `books[]` 定义；`book.toml` 不包含影像来源 ID、路径或哈希。
+打包独立读取本书 `book.toml` 与 `src/`，不需要工作清单或原始数据：
 
-影像底本 ID 和运行 ID 只记录在 raw 清单中；目录仅按实际内容建立，不预设编号或包装层。
-更新已有中间稿前，通过同目录原稿文件或内容缓存保留旧内容及其哈希，并在清单中登记，
-不能丢失输入和 AI 原稿。现有 AI 稿仍未校勘，最终 EPUB 尚未生成。
+```powershell
+uv --cache-dir data/cache/uv run --no-sync hanqing build-book <book-id>
+```
 
-Git 跟踪 Markdown 底本，但发行只收录 `books/<book-id>/src/`，排除整个 `md/`、Markdown 和
-校勘记录；Python wheel/sdist 也不包含 `books/` 或 `data/`。EPUB runner 尚未实现。
+默认输出 `books/<book-id>/dist/<book-id>.epub`；同名 `.build.json` 保存构建记录。
+提供 EPUBCheck 时，同名 `.epubcheck.json` 保存官方报告，`.validation.json` 保存检查摘要。
+`--output books/<book-id>/dist/<新文件名>.epub` 可保存新候选，已有字节拒绝覆盖。
+只有 `src/` 进入 EPUB；md、editorial、dist 和所有工作数据均不打包。Python wheel/sdist
+也不收录 books 或 data。候选构建不会自动表示全文勘定、阅读器验收或正式发行完成。
 
-`cache/` 保存可重建的共享工具缓存。`raw/` 和 `cache/` 均被 Git 忽略，
-使用时由后续命令创建；处理器不得修改原件或丢失历史输入与结果。
+旧 raw 目录、包和检查报告通过 `hanqing migrate-data-layout` 迁移。
+旧清单快照与历史报告保持原字节，当前清单记录 `data_layout_migrations`；历史文件中的
+旧 `data/raw/` 路径按此迁移关系定位。旧构建及包状态保存到各书 `dist/build-history.json`，
+work 不再维护 `build_runs`。已有勘定稿保留在 work，未自动覆盖 books 的接受快照。
 
-忽略意味着数据不会随 Git 备份。原始底本应另做本地或对象存储备份；来源地址、
-SHA-256 和底本说明仅保存在 raw 清单，不在可提交书目中重复登记。
+忽略意味着这些本地数据不会随 Git 备份；原件和完整工作区需要另行备份。

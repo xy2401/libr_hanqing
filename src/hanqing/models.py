@@ -52,7 +52,7 @@ class Series:
 
 @dataclass(frozen=True, slots=True)
 class BookMetadata:
-    """Publication metadata; scan provenance belongs to the local raw manifest."""
+    """Publication metadata; scan provenance belongs to the local work manifest."""
 
     schema_version: int
     id: str

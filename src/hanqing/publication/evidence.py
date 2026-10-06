@@ -42,7 +42,7 @@ def _check_mapping(root: Path, directory: Path) -> dict:
 
 
 def record_validation(root: Path, directory: Path, candidate: Path, result: dict) -> dict:
-    """Verify actual bytes and write a tracked summary, archiving any old summary.
+    """Verify actual bytes and save a build summary beside the candidate.
 
     ``result`` is produced by build_candidate + run_epubcheck. Reusing it requires
     unchanged candidate, report, publication source, baseline hashes and anchors.
@@ -51,12 +51,13 @@ def record_validation(root: Path, directory: Path, candidate: Path, result: dict
     root = root.resolve()
     directory = project_path(root, directory.relative_to(root).as_posix())
     if directory.parent != root / "books":
-        raise ValueError("Validation summary belongs in books/<id>/editorial/")
+        raise ValueError("Use a books/<id>/ directory")
     editorial = project_path(root, directory.relative_to(root).as_posix() + "/editorial")
+    distribution = project_path(root, directory.relative_to(root).as_posix() + "/dist")
     candidate = _local_file(root, candidate)
     checker_path = _local_file(root, result["epubcheck"]["report"])
-    if not checker_path.is_relative_to(root / "data" / "raw"):
-        raise ValueError("The complete checker report belongs in raw")
+    if candidate.parent != distribution or checker_path.parent != distribution:
+        raise ValueError("Candidate and checker report belong in this book's dist/")
     if digest(candidate) != result["sha256"]:
         raise ValueError("Candidate SHA-256 changed since validation")
     if tree_hashes(directory / "src") != result["source_files"]:
@@ -65,10 +66,11 @@ def record_validation(root: Path, directory: Path, candidate: Path, result: dict
         raise ValueError("EPUBCheck report SHA-256 changed")
     checker = json.loads(checker_path.read_text(encoding="utf-8"))["checker"]
     passed = result["epubcheck"]["exit_code"] == 0 and not checker["nFatal"] and not checker["nError"]
-    review = tomllib.loads((editorial / "review.toml").read_text(encoding="utf-8"))
+    review_path = editorial / "review.toml"
+    review = tomllib.loads(review_path.read_text(encoding="utf-8")) if review_path.is_file() else {}
     conversion_path = editorial / "conversion-review.json"
     conversion = json.loads(conversion_path.read_text(encoding="utf-8")) if conversion_path.is_file() else {}
-    destination = editorial / "publication-validation.json"
+    destination = candidate.with_suffix(".validation.json")
     previous = json.loads(destination.read_text(encoding="utf-8")) if destination.is_file() else {}
     same_bytes = previous.get("candidate_sha256") == result["sha256"]
     summary = {
@@ -76,6 +78,7 @@ def record_validation(root: Path, directory: Path, candidate: Path, result: dict
         "recorded_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "status": "candidate-validated" if passed else "candidate-check-failed",
         "candidate_sha256": result["sha256"], "candidate_bytes": candidate.stat().st_size,
+        "candidate_path": candidate.relative_to(root).as_posix(),
         "source_version": "working-tree", "source_sha256": result["source_sha256"],
         "tools": {**result["tools"], "pandoc": conversion.get("pandoc", ""), "epubcheck": checker["checkerVersion"]},
         "structure": result["structure"],
@@ -84,11 +87,12 @@ def record_validation(root: Path, directory: Path, candidate: Path, result: dict
             "fatals": checker["nFatal"], "errors": checker["nError"], "warnings": checker["nWarning"],
             "jar_sha256": result["epubcheck"]["jar_sha256"],
             "report_sha256": result["epubcheck"]["report_sha256"],
+            "report": checker_path.relative_to(root).as_posix(),
         },
         "markdown_mapping": _check_mapping(root, directory),
         "conversion_acceptance": "accepted-conversion-only" if conversion.get("status") == "conversion-accepted" else "not-recorded",
         "full_proofreading": review.get("status", "not-recorded"),
-        "unresolved_items": review.get("text_review", {}).get("unresolved_items"),
+        "unresolved_items": review.get("unresolved_items"),
         "image_collation": review.get("text_review", {}).get("image_collation", "not-recorded"),
         "page_coverage": previous.get("page_coverage", "pending") if same_bytes else "pending",
         "reader_acceptance": previous.get("reader_acceptance", {"status": "pending"}) if same_bytes else {"status": "pending"},
@@ -107,7 +111,7 @@ def record_validation(root: Path, directory: Path, candidate: Path, result: dict
             archived.write_bytes(content)
     temporary = None
     try:
-        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", newline="\n", dir=editorial, suffix=".tmp", delete=False) as stream:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", newline="\n", dir=distribution, suffix=".tmp", delete=False) as stream:
             temporary = Path(stream.name)
             stream.write(json.dumps(summary, ensure_ascii=False, indent=2) + "\n")
         temporary.replace(destination)

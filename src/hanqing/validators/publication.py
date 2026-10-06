@@ -34,7 +34,7 @@ def check_source(source_root: Path) -> dict:
         if path.is_symlink():
             raise ValueError(f"Symlink in publication tree: {path}")
         if path.is_file() and path.name != ".gitkeep":
-            if path.suffix.lower() in (".md", ".toml", ".pdf", ".epub", ".jsonl") or set(path.relative_to(root).parts) & {"md", "editorial", "raw"}:
+            if path.suffix.lower() in (".md", ".toml", ".pdf", ".epub", ".jsonl") or set(path.relative_to(root).parts) & {"md", "editorial", "raw", "inbox", "work", "dist"}:
                 raise ValueError(f"Non-publication file in src: {path}")
             files.append(path)
     if (root / "mimetype").read_bytes() != b"application/epub+zip":

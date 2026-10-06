@@ -10,6 +10,10 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
 
+[project.optional-dependencies]
+# Fresh installs use the current release; existing bundled runtimes are recorded.
+pdf = ["pypdf==6.19.0"]
+
 [project.scripts]
 hanqing = "hanqing.cli:main"
 

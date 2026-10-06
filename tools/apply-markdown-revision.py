@@ -1,4 +1,4 @@
-"""Apply explicit, hash-checked revisions only to raw working Markdown."""
+"""Apply explicit, hash-checked revisions only to work working Markdown."""
 import argparse
 from datetime import datetime, timezone
 import difflib
@@ -22,8 +22,8 @@ def prepare(root, manifest, plan_path):
     root = root.resolve()
     manifest = manifest.resolve()
     plan_path = plan_path.resolve()
-    if not manifest.is_relative_to(root / "data" / "raw") or manifest.name != "manifest.json":
-        raise ValueError("Use the unique raw manifest")
+    if not manifest.is_relative_to(root / "data" / "work") or manifest.name != "manifest.json":
+        raise ValueError("Use the unique work manifest")
     if not plan_path.is_relative_to(manifest.parent):
         raise ValueError("Keep the explicit revision plan in its source set")
     data = json.loads(manifest.read_text(encoding="utf-8"))
@@ -61,7 +61,7 @@ def prepare(root, manifest, plan_path):
         relation = next(b for b in data["books"] if b["book_id"] == operation["book_id"])
         directory = project_path(root, relation["markdown_directory"])
         if not directory.is_relative_to(manifest.parent) or path.parent != directory:
-            raise ValueError("Revisions may only edit this book's raw working directory")
+            raise ValueError("Revisions may only edit this book's work working directory")
         if path.suffix != ".md" or path.name.endswith(".original.md"):
             raise ValueError("Do not revise an original snapshot")
         before = path.read_bytes()
@@ -77,7 +77,7 @@ def prepare(root, manifest, plan_path):
                 source = project_path(root, value["path"])
                 if (not source.is_relative_to(manifest.parent) or source.parent not in allowed
                         or source.suffix != ".md" or source.name.endswith(".original.md")):
-                    raise ValueError("Text evidence must refer to current raw manuscripts")
+                    raise ValueError("Text evidence must refer to current work manuscripts")
                 if (digest(source) != value["sha256"]
                         or digest(source) != index[value["path"]]["sha256"]):
                     raise ValueError(f"Changed text evidence: {source}")
@@ -176,7 +176,7 @@ def apply(root, manifest, plan_path, check=False):
                   "diff": artifact(root, diff_path),
                   "reason": operation["reason"], "finding_ids": operation["finding_ids"],
                   "editor": "Codex", "edited_at": recorded_at,
-                  "acceptance": "raw-working-revision-only", "publication_applied": False}
+                  "acceptance": "work-working-revision-only", "publication_applied": False}
         if method == "existing-markdown-context":
             record["text_evidence"] = [{**value, **({"input_snapshot": input_snapshots[value["path"]]}
                 if value["path"] in input_snapshots else {})} for value in evidence]
@@ -238,7 +238,7 @@ def apply(root, manifest, plan_path, check=False):
     data["files"].append({**artifact(root, history), "kind": "manifest-snapshot", "revision_id": identifier})
     data["files"].append({**artifact(root, plan_path), "kind": "working-revision-plan", "revision_id": identifier})
     data.setdefault("working_revisions", []).append({"id": identifier, "recorded_at": recorded_at,
-        "scope": plan["scope"], "status": "raw-revised-pending-review", "schema_version": 1,
+        "scope": plan["scope"], "status": "work-revised-pending-review", "schema_version": 1,
         "plan": artifact(root, plan_path), "previous_manifest": artifact(root, history),
         "records": records, "source_id": data["source_id"], "assistant": "Codex", "model": None,
         "method": method, "prompt": plan["prompt"],
@@ -247,7 +247,7 @@ def apply(root, manifest, plan_path, check=False):
     if manifest.read_bytes() != original_manifest:
         raise ValueError("Manifest changed during revision")
     save_manifest(manifest, data)
-    return {"status": "raw-revised", "revision_id": identifier, "manuscripts": len(records)}
+    return {"status": "work-revised", "revision_id": identifier, "manuscripts": len(records)}
 
 
 if __name__ == "__main__":

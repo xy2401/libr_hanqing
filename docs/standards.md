@@ -4,7 +4,7 @@
 
 每本书使用 `images/` 保存选定的封面与插图素材，`src/META-INF/container.xml` 与 `src/mimetype` 表达容器结构，`src/epub/` 下分设 `text/`、`images/`、`css/`，并保存 `content.opf`、`toc.xhtml`。项目模板中的 `core.css`、`local.css` 均为自写中文样式，不是官方同名文件；官方严格 profile 另有不可编辑的 `core.css`、`se.css`。[官方布局](https://github.com/standardebooks/manual/blob/master/2-filesystem.rst)
 
-完整 Markdown 工作稿、原稿快照与过程材料保留在 raw；书籍根目录的 `md/` 只保留纳入 Git 的文字底本快照，供校勘核对，不自动跟随工作稿变化。项目整理完成后逐项确认成品并复制进入 books，raw 中的来源与项目材料继续保留。`md/` 与 `src/` 并列，不能加入 OPF、spine 或 EPUB；发行只收录 `src/` 出版源码，排除全部 Markdown 和 `editorial/`。底本可包含待剥离的现代附加材料，出版正文仍按下述古籍内容政策处理。候选打包 runner 已实现，完整发行门禁仍待接入。
+完整 Markdown 工作稿、原稿快照与过程材料保留在 work；书籍根目录的 `md/` 只保留纳入 Git 的文字底本快照，供校勘核对，不自动跟随工作稿变化。项目整理完成后逐项确认成品并复制进入 books，work 中的来源与项目材料继续保留。`md/` 与 `src/` 并列，不能加入 OPF、spine 或 EPUB；发行只收录 `src/` 出版源码，排除全部 Markdown 和 `editorial/`。底本可包含待剥离的现代附加材料，出版正文仍按下述古籍内容政策处理。候选打包 runner 已实现，完整发行门禁仍待接入。
 
 EPUB 3 基线包括合法的 OCF 打包、可解析的 XHTML、OPF 元数据、完整 manifest、明确 spine，以及带导航语义的目录。初期以可重排横排为默认，竖排另设配置并验证阅读器支持；电子书正文必须可选择、检索。[EPUB 3.3](https://www.w3.org/TR/epub-33/)
 
@@ -12,7 +12,7 @@ EPUB 3 基线包括合法的 OCF 打包、可解析的 XHTML、OPF 元数据、�
 
 卷、篇、章节以 `section` 或 `article` 组织，标题层级反映原书结构；ID 在全书范围内唯一。注释保留注释者与层次，采用注释引用及回链，图片提供文字说明，语言标签与 OPF 一致。spine 由明确的章节顺序生成并人工复核，不能依据文件名猜测。[XHTML 规则](https://github.com/standardebooks/manual/blob/master/5-general-xhtml-and-css-patterns.rst)、[spine 规则](https://github.com/standardebooks/manual/blob/master/9-metadata.rst)
 
-OPF 记录古籍书名、原作作者及贡献者角色、语言、数字版本与更新时间，使用带作者或系列前缀的本项目标识符。现代扫描版出版社、ISBN、版权页、主编/点校者和共享 PDF 的说明保存在 raw 清单，不写入出版 OPF、版本说明或正文。现代点校说明与出版前言不自动进入古籍正文。系列采用 `belongs-to-collection`，以 `collection-type` 区分系列或套书，并记录实际作品次序；现代底本的全集卷次不自动复制为电子书系列信息。作者和系列分类是同一书籍的索引视图，不复制正文。[元数据规则](https://github.com/standardebooks/manual/blob/master/9-metadata.rst)
+OPF 记录古籍书名、原作作者及贡献者角色、语言、数字版本与更新时间，使用带作者或系列前缀的本项目标识符。现代扫描版出版社、ISBN、版权页、主编/点校者和共享 PDF 的说明保存在 work 清单，不写入出版 OPF、版本说明或正文。现代点校说明与出版前言不自动进入古籍正文。系列采用 `belongs-to-collection`，以 `collection-type` 区分系列或套书，并记录实际作品次序；现代底本的全集卷次不自动复制为电子书系列信息。作者和系列分类是同一书籍的索引视图，不复制正文。[元数据规则](https://github.com/standardebooks/manual/blob/master/9-metadata.rst)
 
 中文 profile 另定繁简、异体字、缺字、标点、夹注与字形策略。英语 titlecase、美式引号、断词、拼写现代化及英文可读性评分不能自动套用古籍；保留原文的决定应可追溯。[英语排版规则](https://github.com/standardebooks/manual/blob/master/8-typography.rst)
 
@@ -27,6 +27,11 @@ OPF 记录古籍书名、原作作者及贡献者角色、语言、数字版本�
 保存修订前字节、实际哈希、所核页图与坐标；整段恢复要同时核对节序、例句和注释引用。
 所列疑点已有定读、指定一章影像勘定、全书页覆盖、人工接受与发行验收分别记录。
 工作稿的结论不自动同步到已接受的出版源码或候选 EPUB。
+
+文字校勘逐版本阅读，不能用另一版本的通顺措辞或校注补改当前稿。
+相邻重复与重复词的语法作用须区分，例如「無無因之果」「好好色」「言之之時」不能機械去重。
+明确误断可移动已有标点，保存原读与理由；疑似漏字或整体词组不通而无唯一文内采读时保留待核。
+文内推校仍须核原页；原稿确为相邻重复时，后续须另判断原书误植与数字转录错误，不混淆两者。
 
 ## 封面
 
@@ -87,11 +92,12 @@ OCF 的 `mimetype` 位于 ZIP 首项，不压缩、不带额外字段，内容�
 同一固定源码产生相同候选字节；真实校验始终针对该候选包，不在验收后重建发行包。
 
 当前《政治講義》和《英文漢詁》的候选已通过 EPUBCheck 5.4.0，均为 0 错误、0 警告；
-检查摘要及候选哈希位于 raw 对应作品的 `editorial.<work-id>/publication-validation.json`，完整报告也保存在 raw。
-构建命令自动保存摘要，保存前核验实际包/报告/源码哈希及段落映射；旧摘要在 raw 中按
+旧包、检查摘要与完整报告已按原字节迁到各书 `dist/`；构建历史保存在 `dist/build-history.json`。
+新的构建不需要工作区清单，同名 `.build.json`、`.epubcheck.json` 和 `.validation.json` 也存于本书 `dist/`。
+构建命令自动保存摘要，保存前核验实际包/报告/源码哈希及段落映射；旧摘要在本书 `dist/` 中按
 内容哈希保留。正文或底本已改变时拒绝沿用旧报告；候选字节改变后，旧阅读器与页覆盖
 记录不能自动转移到新包。相同字节可复用既有官方报告，记录新的摘要保存时间而不虚构检查时间。
-本轮接受正文转换与注释取舍，未表示 21 项文字疑点已解决、影像校勘或页覆盖已完成。
+此前接受的是正文转换与注释取舍；后续工作稿定读分别记录，完整影像覆盖与出版修订接受仍待完成。
 阅读器验收仍待完成，本地浏览器预览受访问限制未成功，不能用工具检查代替实际排版验收。
 
 可选尝试 `se lint` 与 `se build --check`，按实际支持情况评估差异；后者调用 EPUBCheck、Nu，安装 Ace 时追加其检查。[EPUBCheck](https://www.w3.org/publishing/epubcheck/)、[SE build](https://github.com/standardebooks/tools/blob/master/se/commands/build.py)

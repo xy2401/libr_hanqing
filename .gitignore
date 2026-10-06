@@ -1,7 +1,11 @@
 # 原始底本、解包、页图、识别响应、缓存：仅本地保存。
 # Markdown 文字底本放 books/*/md/ 并纳入 Git，不忽略 *.md 或 md/。
+/data/inbox/
+/data/work/
+# 兼容旧路径，防止误放的本地数据进入 Git。
 /data/raw/
 /data/cache/
+/books/*/dist/
 /dist/
 /build/
 

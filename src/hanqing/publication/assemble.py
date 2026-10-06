@@ -30,15 +30,15 @@ def tree_hashes(directory: Path) -> dict[str, str]:
 def read_context(root: Path, manifest: Path, book_id: str) -> tuple[dict, dict, Path]:
     root = root.resolve()
     manifest = manifest.resolve()
-    if not manifest.is_relative_to(root / "data" / "raw") or manifest.name != "manifest.json":
-        raise ValueError("Use the source set's data/raw/<id>/manifest.json")
+    if not manifest.is_relative_to(root / "data" / "work") or manifest.name != "manifest.json":
+        raise ValueError("Use the source set's data/work/<id>/manifest.json")
     data = json.loads(manifest.read_text(encoding="utf-8"))
     if data.get("schema_version") != 3 or data.get("path_base") != "project":
         raise ValueError("Assembly requires manifest schema 3 with project-relative paths")
     validate_id(book_id)
     matches = [item for item in data["books"] if item["book_id"] == book_id]
     if len(matches) != 1:
-        raise ValueError("Exactly one book relationship is required in the raw manifest")
+        raise ValueError("Exactly one book relationship is required in the work manifest")
     relation = matches[0]
     directory = project_path(root, relation["book_directory"])
     if directory != root / "books" / book_id:
@@ -66,7 +66,7 @@ def working_editorial_directory(root: Path, manifest: Path, relation: dict, work
     value = relation.get("editorial_directory", (manifest.parent / f"editorial.{work_id}").relative_to(root).as_posix())
     path = project_path(root, value)
     if path.parent != manifest.parent or not path.name.startswith("editorial."):
-        raise ValueError("Working editorial records must belong to this raw source set")
+        raise ValueError("Working editorial records must belong to this work source set")
     return path
 
 
@@ -271,7 +271,7 @@ def assemble_book(root: Path, manifest: Path, book_id: str, *, pandoc: str = "pa
     for name, content in {
         "review.toml": 'schema_version = 1\nstatus = "pending"\nreviewer = ""\nreviewed_at = ""\n',
         "decisions.jsonl": "",
-        "notes.md": "# 整理记录\n\n在 raw 保存校勘政策、疑点和处理记录；具体成品完成整理后逐项确认。\n",
+        "notes.md": "# 整理记录\n\n在 work 保存校勘政策、疑点和处理记录；具体成品完成整理后逐项确认。\n",
     }.items():
         path = working_editorial / name
         if not path.exists():
@@ -321,7 +321,7 @@ def accept_proposal(root: Path, manifest: Path, book_id: str, *, reviewer: str) 
     snapshots = _snapshot_markdown(root, markdown_directory(root, manifest, relation, directory), directory)
     shutil.copytree(directory / "src", previous)
     # Only the exact proposal resources are installed, including regenerated OPF/nav.
-    # No files from md/ or raw are copied into publication src/.
+    # No files from md/ or work are copied into publication src/.
     shutil.copytree(proposal / "src", directory / "src", dirs_exist_ok=True)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     rows = []

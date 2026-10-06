@@ -12,7 +12,14 @@ from .catalog import discover_books, load_book
 from .models import BookMetadata, Creator, Series, validate_id
 from .pipeline import STAGES
 from .scaffold import initialize_book
-from .publication.assemble import assemble_book, accept_proposal, read_context, save_manifest
+from .publication.assemble import assemble_book, accept_proposal
+from .publication.xmlutil import project_path
+from .workspace import migrate_data_layout
+from .ingest import intake_pdfs
+from .transcription import record_transcriptions
+from .pdf_render import render_pdf_page
+from .transcription_audit import audit_transcription_task
+from .text_review import record_text_review
 from .publication.package import build_candidate, run_epubcheck
 from .publication.evidence import record_validation
 from .validators.publication import check_source
@@ -44,7 +51,7 @@ def _parser() -> argparse.ArgumentParser:
     commands.add_parser("check-catalog", help="验证书目元数据；不验证正文或 EPUB 合规性")
     plan = commands.add_parser("plan", help="显示处理阶段契约和实现范围，不执行处理")
     plan.add_argument("id", help="书籍 ID")
-    assemble = commands.add_parser("assemble-book", help="按 raw 清单的明确取舍生成 XHTML 提案，不覆盖出版正文")
+    assemble = commands.add_parser("assemble-book", help="按 work 清单的明确取舍生成 XHTML 提案，不覆盖出版正文")
     assemble.add_argument("id")
     assemble.add_argument("--manifest", required=True, type=Path)
     assemble.add_argument("--pandoc", default="pandoc", help="本地 Pandoc 程序路径")
@@ -56,9 +63,29 @@ def _parser() -> argparse.ArgumentParser:
     check.add_argument("source", type=Path)
     build = commands.add_parser("build-book", help="仅从 books/<id>/src/ 打候选包；不提升发行状态")
     build.add_argument("id")
-    build.add_argument("--manifest", required=True, type=Path)
+    build.add_argument("--output", type=Path, help="本书 dist/ 中的新 EPUB 文件；默认 <id>.epub")
     build.add_argument("--epubcheck-jar", type=Path, help="本地官方 EPUBCheck jar；提供时检查候选包")
     build.add_argument("--java", default="java")
+    migrate = commands.add_parser("migrate-data-layout", help="将旧 raw 工作区及书籍打包产物迁入新目录")
+    migrate.add_argument("--check", action="store_true", help="只检查迁移范围，不写文件")
+    intake = commands.add_parser("intake-pdfs", help="按显式清单接收 inbox PDF，无损提取内嵌图片流，不识别文字")
+    intake.add_argument("--plan", required=True, type=Path)
+    intake.add_argument("--check", action="store_true", help="核对输入与目标，不移动或解包")
+    intake.add_argument("--resume", action="store_true", help="只恢复同一原件、同一哈希的未完成解包")
+    transcription = commands.add_parser("record-transcriptions", help="登记助手看图写出的逐页稿和真实哈希，不执行识别")
+    transcription.add_argument("--input", required=True, type=Path)
+    transcription.add_argument("--revision-id", help="显式修订待校勘页稿，先保存原稿快照")
+    transcription.add_argument("--revision-reason", help="本次看图更正或文字推校的依据")
+    transcription.add_argument("--revision-method", choices=("assistant-direct-multimodal", "existing-markdown-context"), default="assistant-direct-multimodal")
+    render = commands.add_parser("render-pdf-page", help="渲染明确的一页 PDF 供助手视读，登记来源与参数，不识别文字")
+    render.add_argument("--manifest", required=True, type=Path)
+    render.add_argument("--page", required=True, type=int, help="从 1 开始的物理页")
+    render.add_argument("--dpi", type=int, default=300)
+    audit = commands.add_parser("check-transcriptions", help="核验明确任务的页序与工作稿实际哈希，保存待校勘报告")
+    audit.add_argument("--manifest", required=True, type=Path)
+    audit.add_argument("--task", required=True)
+    review = commands.add_parser("record-text-review", help="登记实际阅读的 Markdown 页稿及文字校勘判断，不自动判断正文")
+    review.add_argument("--input", required=True, type=Path)
     return parser
 
 
@@ -77,7 +104,7 @@ def _initialize(args: argparse.Namespace) -> None:
     )
     target = initialize_book(args.root, book)
     print(f"已创建：{target}")
-    print("状态：draft；请在 raw 清单登记来源并添加校勘正文。")
+    print("状态：draft；请在 work 清单登记来源并添加校勘正文。")
 
 
 def _catalog(args: argparse.Namespace) -> None:
@@ -132,39 +159,64 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(check_source(source), ensure_ascii=False, indent=2))
         elif args.command == "build-book":
             root = args.root.resolve()
-            manifest = args.manifest if args.manifest.is_absolute() else root / args.manifest
-            data, relation, directory = read_context(root, manifest, args.id)
-            output = manifest.parent / f"build.{args.id}" / f"{args.id}.epub"
+            book_id = validate_id(args.id)
+            directory = project_path(root, f"books/{book_id}")
+            book = load_book(directory / "book.toml")
+            if book.id != book_id:
+                raise ValueError("Book directory does not match its stable ID")
+            distribution = project_path(root, f"books/{book_id}/dist")
+            output = args.output or distribution / f"{book_id}.epub"
+            relative = output.relative_to(root).as_posix() if output.is_absolute() else output.as_posix()
+            output = project_path(root, relative)
+            if output.parent != distribution or output.suffix != ".epub":
+                raise ValueError("Build output must be an EPUB in this book's dist/")
+            checker_path = output.with_suffix(".epubcheck.json")
+            receipt = output.with_suffix(".build.json")
+            for path in (output, checker_path, receipt, output.with_suffix(".validation.json")):
+                if path.exists():
+                    raise FileExistsError(f"Existing build bytes are preserved; choose a new --output: {path}")
             result = build_candidate(directory / "src", output)
             if args.epubcheck_jar:
                 jar = args.epubcheck_jar if args.epubcheck_jar.is_absolute() else root / args.epubcheck_jar
-                result["epubcheck"] = run_epubcheck(output, jar, manifest.parent / f"validation.{args.id}" / "epubcheck.json", java=args.java)
-                working_editorial = root / relation["editorial_directory"] if relation.get("editorial_directory") else None
-                result["validation_summary"] = record_validation(root, directory, output, result, editorial_directory=working_editorial)
-                summary = result["validation_summary"]
-                record = next((item for item in data["files"] if item["path"] == summary["path"]), None)
-                if record is None:
-                    record = {"path": summary["path"], "kind": "candidate-validation", "book_id": args.id}
-                    data["files"].append(record)
-                elif summary.get("previous_summary"):
-                    record.setdefault("revisions", []).append({"operation": "candidate-validation-update",
-                        "previous_snapshot": summary["previous_summary"], "previous_sha256": record["sha256"], "sha256": summary["sha256"]})
-                record.update(sha256=summary["sha256"], bytes=(root / summary["path"]).stat().st_size)
-                relation.setdefault("publication_status", {})["validation_summary"] = {key: summary[key] for key in ("path", "sha256")}
-                result["epubcheck"]["report"] = Path(result["epubcheck"]["report"]).relative_to(root).as_posix()
+                result["epubcheck"] = run_epubcheck(output, jar, checker_path, java=args.java)
+                result["validation_summary"] = record_validation(root, directory, output, result)
+                result["epubcheck"]["report"] = checker_path.relative_to(root).as_posix()
             else:
                 result["epubcheck"] = {"status": "not-run"}
             result["candidate_path"] = output.relative_to(root).as_posix()
-            data.setdefault("build_runs", []).append({"book_id": args.id, **result})
-            save_manifest(manifest, data)
+            result["book_id"] = book_id
+            receipt.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+            result["build_record"] = receipt.relative_to(root).as_posix()
             print(json.dumps(result, ensure_ascii=False, indent=2))
             if result["epubcheck"]["status"] == "failed":
                 return 2
+        elif args.command == "migrate-data-layout":
+            print(json.dumps(migrate_data_layout(args.root, check=args.check), ensure_ascii=False, indent=2))
+        elif args.command == "intake-pdfs":
+            plan = args.plan if args.plan.is_absolute() else args.root / args.plan
+            def progress(item):
+                print(f"{item['source_set_id']}: {item['completed_pages']}/{item['page_count']}", file=sys.stderr, flush=True)
+            print(json.dumps(intake_pdfs(args.root, plan, check=args.check, resume=args.resume,
+                                        progress=progress), ensure_ascii=False, indent=2))
+        elif args.command == "record-transcriptions":
+            source = args.input if args.input.is_absolute() else args.root / args.input
+            print(json.dumps(record_transcriptions(args.root, source, revision_id=args.revision_id,
+                                                   revision_reason=args.revision_reason, revision_method=args.revision_method), ensure_ascii=False, indent=2))
+        elif args.command == "record-text-review":
+            source = args.input if args.input.is_absolute() else args.root / args.input
+            print(json.dumps(record_text_review(args.root, source), ensure_ascii=False, indent=2))
+        elif args.command == "render-pdf-page":
+            manifest = args.manifest if args.manifest.is_absolute() else args.root / args.manifest
+            print(json.dumps(render_pdf_page(args.root, manifest, args.page, dpi=args.dpi), ensure_ascii=False, indent=2))
+        elif args.command == "check-transcriptions":
+            manifest = args.manifest if args.manifest.is_absolute() else args.root / args.manifest
+            result = audit_transcription_task(args.root, manifest, args.task)
+            print(json.dumps({key: result[key] for key in ('status', 'page_count', 'report_path', 'report_sha256')}, ensure_ascii=False, indent=2))
         elif args.command == "plan":
             book_id = validate_id(args.id)
             book = load_book(args.root / "books" / book_id / "book.toml")
             print(f"{book.title} [{book.id}] 当前书目标记：{book.status}")
-            print("assemble-book、build-book 和出版结构/EPUBCheck 检查已接入；其余阶段仍为契约。书目标记不代表检查已通过。")
+            print("intake-pdfs、render-pdf-page、record-transcriptions、assemble-book、build-book 和出版结构/EPUBCheck 检查已接入；完整识别管理等阶段仍为契约。书目标记不代表检查已通过。")
             for index, stage in enumerate(STAGES, 1):
                 print(f"{index}. {stage.name}: {stage.purpose}\n   输出：{stage.output}\n   门禁：{stage.gate}")
     except (OSError, ValueError, subprocess.SubprocessError, ET.ParseError) as error:

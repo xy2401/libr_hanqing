@@ -20,7 +20,7 @@ automatic_punctuation = false
 [publication]
 source_directory = "src"
 exclude = ["md/**", "**/*.md", "editorial/**"]
-# EPUB runner 尚未实现；未来仅从 source_directory 收集出版文件。
+# build-book 已仅收集 src；本草案仍未被统一 runner 读取。
 profile = "hanqing-zh-v1"
 writing_mode = "horizontal-tb"
 require_human_review = true

@@ -56,7 +56,7 @@ class PublicationTests(unittest.TestCase):
         (self.book/'src/epub/images/cover.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="2100"><rect width="1400" height="2100" fill="white"/></svg>', encoding='utf-8')
         self.md = self.book/'md/body.md'
         self.md.write_text('# 原篇\n\n§1 原著夾注（原注）[^modern]\n\n"Wrong example": He have books... -- preserve.\n\n| 中文 | English |\n| --- | --- |\n| 字母 | Alphabet |\n\n1. Example<br>原例\n2. Second example\n\n### 校勘注釋\n\n[^modern]: 現代注釋\n', encoding='utf-8')
-        self.manifest = self.root/'data/raw/source-set/manifest.json'
+        self.manifest = self.root/'data/work/source-set/manifest.json'
         self.manifest.parent.mkdir(parents=True)
         path = self.md.relative_to(self.root).as_posix()
         data = {"schema_version": 3, "path_base": "project", "files": [{"path": path, "sha256": digest(self.md)}], "books": [{"book_id": self.book_id, "book_directory": self.book.relative_to(self.root).as_posix(), "markdown_order": [{"path": path}], "publication_policy": {"modern_notes": "exclude"}, "publication_plan": [{"chapter_id": "chapter-one", "title": "原篇", "markdown_path": path, "markdown_sha256": digest(self.md), "line_range": [1, 12], "omit_note_ids": ["modern"], "epub_type": "chapter"}]}]}
@@ -150,7 +150,7 @@ class PublicationTests(unittest.TestCase):
     def test_raw_markdown_from_a_different_source_set_is_rejected(self):
         self.use_raw_working_markdown()
         data = json.loads(self.manifest.read_text(encoding='utf-8'))
-        data['books'][0]['markdown_directory'] = 'data/raw/different-source/md.example'
+        data['books'][0]['markdown_directory'] = 'data/work/different-source/md.example'
         self.manifest.write_text(json.dumps(data, ensure_ascii=False), encoding='utf-8')
         with self.assertRaisesRegex(ValueError, 'this source set'):
             self.assemble()
@@ -222,16 +222,16 @@ class PublicationTests(unittest.TestCase):
         return {'status': 'passed', 'exit_code': 0, 'report': str(report), 'report_sha256': digest(report), 'jar_sha256': 'a' * 64}
 
     def fixture_candidate(self, source, name):
-        candidate = self.manifest.parent/f'{name}.epub'
+        candidate = self.book/'dist'/f'{name}.epub'
         result = build_candidate(source, candidate)
-        result['epubcheck'] = self.fixture_checker_result(candidate, None, self.manifest.parent/f'validation.{name}/epubcheck.json')
+        result['epubcheck'] = self.fixture_checker_result(candidate, None, candidate.with_suffix('.epubcheck.json'))
         return candidate, result
 
     def test_validation_summary_archives_old_bytes_and_resets_reader_on_new_candidate(self):
         source = self.accepted_source()
         candidate, result = self.fixture_candidate(source, 'first')
         record_validation(self.root, self.book, candidate, result)
-        summary = self.manifest.parent/'editorial.example/publication-validation.json'
+        summary = candidate.with_suffix('.validation.json')
         self.assertFalse((self.book/'editorial/publication-validation.json').exists())
         previous = json.loads(summary.read_text(encoding='utf-8'))
         previous['reader_acceptance'] = {'status': 'passed', 'reader': 'fixture-reader'}
@@ -246,16 +246,16 @@ class PublicationTests(unittest.TestCase):
         write_xml(chapter, doc)
         candidate, result = self.fixture_candidate(source, 'second')
         record_validation(self.root, self.book, candidate, result)
-        final = json.loads(summary.read_text(encoding='utf-8'))
+        final = json.loads(candidate.with_suffix('.validation.json').read_text(encoding='utf-8'))
         self.assertEqual(final['reader_acceptance']['status'], 'pending')
-        self.assertEqual(final['full_proofreading'], 'pending')
+        self.assertEqual(final['full_proofreading'], 'not-recorded')
         self.assertEqual(final['release_status'], 'not-released')
 
     def test_stale_candidate_report_source_or_mapping_cannot_replace_summary(self):
         source = self.accepted_source()
         candidate, result = self.fixture_candidate(source, 'first')
         record_validation(self.root, self.book, candidate, result)
-        summary = self.manifest.parent/'editorial.example/publication-validation.json'
+        summary = candidate.with_suffix('.validation.json')
         original_summary = summary.read_bytes()
         checker = Path(result['epubcheck']['report'])
         source_file = source/'epub/text/chapter-one.xhtml'
@@ -274,14 +274,16 @@ class PublicationTests(unittest.TestCase):
                 self.assertEqual(summary.read_bytes(), original_summary)
                 path.write_bytes(before)
 
-    def test_build_cli_automatically_saves_validation_summary_and_manifest_reference(self):
+    def test_build_cli_saves_independent_book_receipt_without_changing_work_manifest(self):
         self.accepted_source()
+        before = self.manifest.read_bytes()
         with patch('hanqing.cli.run_epubcheck', side_effect=self.fixture_checker_result), redirect_stdout(io.StringIO()):
-            status = main(['--root', str(self.root), 'build-book', self.book_id, '--manifest', str(self.manifest), '--epubcheck-jar', 'fixture.jar'])
+            status = main(['--root', str(self.root), 'build-book', self.book_id, '--epubcheck-jar', 'fixture.jar'])
         self.assertEqual(status, 0)
-        manifest = json.loads(self.manifest.read_text(encoding='utf-8'))
-        record = manifest['build_runs'][-1]['validation_summary']
-        self.assertTrue(record['path'].startswith('data/raw/source-set/editorial.example/'))
+        self.assertEqual(self.manifest.read_bytes(), before)
+        receipt = self.book/'dist'/f'{self.book_id}.build.json'
+        record = json.loads(receipt.read_text(encoding='utf-8'))['validation_summary']
+        self.assertTrue(record['path'].startswith('books/author-example/dist/'))
         self.assertFalse((self.book/'editorial/publication-validation.json').exists())
         self.assertEqual(digest(self.root/record['path']), record['sha256'])
         self.assertEqual(json.loads((self.root/record['path']).read_text(encoding='utf-8'))['markdown_mapping']['anchors_and_baseline_hashes'], 'passed')

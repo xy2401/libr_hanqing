@@ -61,7 +61,7 @@ def _parse_book(data: dict[str, Any]) -> BookMetadata:
     if source_fields:
         raise MetadataError(
             f"book: {', '.join(source_fields)} belong in "
-            "data/raw/<source-set-id>/manifest.json, not book.toml"
+            "data/work/<source-set-id>/manifest.json, not book.toml"
         )
     _check_fields(data, _BOOK_FIELDS, "book")
     schema_version = data.get("schema_version")

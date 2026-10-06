@@ -19,7 +19,7 @@ class WorkingRevisionTests(unittest.TestCase):
         spec = importlib.util.spec_from_file_location("working_revision", processor)
         self.module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self.module)
-        self.base = self.root / "data/raw/example"
+        self.base = self.root / "data/work/example"
         self.markdown = self.base / "md.example/chapter.md"
         self.editorial = self.base / "editorial.example"
         self.markdown.parent.mkdir(parents=True)
@@ -33,15 +33,15 @@ class WorkingRevisionTests(unittest.TestCase):
         self.book.write_bytes(b"accepted-text")
         self.manifest = self.base / "manifest.json"
         relation = {"book_id":"author-example","work_id":"example",
-                    "markdown_directory":"data/raw/example/md.example",
-                    "editorial_directory":"data/raw/example/editorial.example"}
+                    "markdown_directory":"data/work/example/md.example",
+                    "editorial_directory":"data/work/example/editorial.example"}
         self.data = {"schema_version":3,"path_base":"project","source_set_id":"example","source_id":"source-one",
                      "books":[relation],"files":[self.module.artifact(self.root,self.markdown),self.module.artifact(self.root,self.page)]}
         self.manifest.write_text(json.dumps(self.data), encoding="utf-8")
         self.plan = self.editorial / "revision-plan.json"
         self.value = {"schema_version":1,"revision_id":"image-revision-example","scope":"one-verified-word",
                       "prompt":"Correct the verified transcription error.","operations":[{
-                          "book_id":"author-example","path":"data/raw/example/md.example/chapter.md",
+                          "book_id":"author-example","path":"data/work/example/md.example/chapter.md",
                           "expected_sha256":self.module.digest(self.markdown),"evidence_pages":[self.module.artifact(self.root,self.page)],
                           "reason":"verified-source-reading","finding_ids":["example-one"],
                           "edits":[{"old":"錯","new":"正","occurrences":1}]}]}
@@ -83,9 +83,9 @@ class WorkingRevisionTests(unittest.TestCase):
     def test_book_path_and_wrong_occurrence_count_refused(self):
         self.value["operations"][0]["path"]="books/author-example/src/chapter.xhtml"
         self.save_plan()
-        with self.assertRaisesRegex(ValueError,"raw working directory"):
+        with self.assertRaisesRegex(ValueError,"work working directory"):
             self.module.apply(self.root,self.manifest,self.plan)
-        self.value["operations"][0]["path"]="data/raw/example/md.example/chapter.md"
+        self.value["operations"][0]["path"]="data/work/example/md.example/chapter.md"
         self.value["operations"][0]["edits"][0]["occurrences"]=2
         self.save_plan()
         with self.assertRaisesRegex(ValueError,"Unexpected replacement count"):
